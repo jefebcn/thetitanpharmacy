@@ -540,10 +540,11 @@
   <div class="pharma-view" id="pharma-view">
     <div class="pharma-hero">
       <div class="pharma-hero-icon">💉</div>
-      <div>
+      <div style="flex:1">
         <div class="pharma-hero-title">PHARMA & PERFORMANCE</div>
         <div class="pharma-hero-sub">Injectable · Oral · SARMS · Peptides · PCT — Professional grade</div>
       </div>
+      <button id="pharma-admin-btn" onclick="openPharmaAdminPanel()" style="display:none;background:rgba(232,184,75,.15);border:1px solid rgba(232,184,75,.3);border-radius:8px;padding:7px 12px;color:var(--gold);font-size:.72rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⚙️ Admin</button>
     </div>
     <div class="brand-tabs" id="pharma-brand-tabs">
       <button class="brand-tab active-all" onclick="setPharmaFilter('brand','all',this)">🔥 All</button>
@@ -676,6 +677,25 @@
     <button class="btn-add-product" onclick="openProductForm(null)">＋ Add New Product</button>
     <div class="admin-list" id="admin-list"></div>
   </div>
+</div>
+
+<!-- PHARMA ADMIN PANEL -->
+<div class="panel" id="pharma-admin-panel">
+  <div class="panel-overlay" onclick="closePanel('pharma-admin-panel')"></div>
+  <div class="panel-content">
+    <div class="panel-handle"></div>
+    <div class="admin-panel-header">
+      <div class="panel-title">💉 Gestisci Pharma</div>
+    </div>
+    <button class="btn-add-product" onclick="openPharmaForm(null)">＋ Add Pharma Product</button>
+    <div class="admin-list" id="pharma-admin-list"></div>
+  </div>
+</div>
+
+<!-- PHARMA PRODUCT FORM PANEL -->
+<div class="panel" id="pharma-form-panel">
+  <div class="panel-overlay" onclick="closePanel('pharma-form-panel')"></div>
+  <div class="panel-content" id="pharma-form-content"></div>
 </div>
 
 <!-- PRODUCT FORM PANEL -->
@@ -961,46 +981,69 @@ function openCart(){ renderCartPanel(); document.getElementById('cart-panel').cl
 // ===== ORDERS =====
 function placeOrder(){
   const note=document.getElementById('order-note').value;
+
+  // Build item lines with emoji
+  const itemLines = cart.map(x=>{
+    if(String(x.id).startsWith('pharma_')){
+      const pp=PHARMA_LOCAL.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
+      return pp ? `${pp.emoji} ${pp.name} ×${x.qty} — €${pp.price * x.qty}` : null;
+    }
+    const p=PRODUCTS.find(px=>String(px.id)===String(x.id));
+    return p ? `${p.emoji||'🌿'} ${p.name} ×${x.qty} — €${p.price * x.qty}` : null;
+  }).filter(Boolean);
+
   const tot=cart.reduce((s,x)=>{
     if(String(x.id).startsWith('pharma_')){
-      const pp=PHARMA_PRODUCTS.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
+      const pp=PHARMA_LOCAL.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
       return s+(pp?pp.price*x.qty:0);
     }
     const p=PRODUCTS.find(px=>String(px.id)===String(x.id));return s+(p?p.price*x.qty:0);
   },0);
+
+  const orderId='TP-'+Date.now().toString(36).toUpperCase();
+  const date=new Date().toLocaleDateString('en-GB');
+
   const o={
-    id:'TP-'+Date.now().toString(36).toUpperCase(),
-    date:new Date().toLocaleDateString('en-GB'),
-    items:cart.map(x=>{
-      if(String(x.id).startsWith('pharma_')){
-        const pp=PHARMA_PRODUCTS.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
-        return pp?`${pp.name} ×${x.qty}`:'?';
-      }
-      const p=PRODUCTS.find(px=>String(px.id)===String(x.id));return p?`${p.name} ×${x.qty}`:'?';
-    }).join(', '),
-    total:tot, status:'pending', note
+    id:orderId, date, status:'pending', note,
+    items:itemLines.map(l=>l.replace(/ — €[\d.]+/,'')).join(', '),
+    total:tot
   };
   orders.unshift(o);
   localStorage.setItem('tp_orders',JSON.stringify(orders));
 
-  // 📲 Send order to Telegram bot
+  // 📲 Build pre-filled Telegram message
+  const user = currentUser || 'Guest';
+  const msgLines = [
+    '🛒 *NUOVO ORDINE — The Titan Pharmacy*',
+    `🆔 Ordine: ${orderId}`,
+    `👤 Cliente: ${user}`,
+    `📅 Data: ${date}`,
+    '',
+    '📦 *Prodotti:*',
+    ...itemLines,
+    '',
+    `🚚 Spedizione: €15`,
+    `💰 *TOTALE: €${tot + 15}*`,
+  ];
+  if(note) msgLines.push('', `📝 Note: ${note}`);
+
+  const msg = msgLines.join('\n');
+
+  // 📲 Telegram WebApp native (if inside Telegram)
   if (window.Telegram?.WebApp) {
-    const orderData = {
-      order_id: o.id,
-      user: currentUser || 'Anonymous',
-      items: o.items,
-      total: tot,
-      note: note || '',
-      date: o.date
-    };
-    window.Telegram.WebApp.sendData(JSON.stringify(orderData));
+    window.Telegram.WebApp.sendData(JSON.stringify({order_id:orderId,user,items:o.items,total:tot,note,date}));
   }
 
   cart=[]; saveCart(); updateCartUI();
   closePanel('cart-panel');
-  renderOrders(); showToast('🎉 Ordine inviato! #'+o.id);
-  // Redirect to Telegram to complete the order
-  setTimeout(()=>{ window.open('https://t.me/titanpharmacyceo','_blank'); },800);
+  renderOrders();
+  showToast('🎉 Ordine pronto! #'+orderId);
+
+  // Open Telegram with pre-filled message
+  setTimeout(()=>{
+    const tgUrl = 'https://t.me/titanpharmacyceo?text=' + encodeURIComponent(msg);
+    window.open(tgUrl, '_blank');
+  }, 600);
 }
 function renderOrders(){
   const list=document.getElementById('orders-list');
@@ -1459,6 +1502,196 @@ function renderCartPanel(){
 window.addPharmaToCart = addPharmaToCart;
 window.setPharmaFilter = setPharmaFilter;
 window.renderPharma = renderPharma;
+
+// ===== PHARMA ADMIN =====
+// Local mutable copy of pharma products (layered on top of static PHARMA_PRODUCTS)
+let PHARMA_LOCAL = JSON.parse(localStorage.getItem('tp_pharma') || 'null');
+if(!PHARMA_LOCAL) {
+  PHARMA_LOCAL = JSON.parse(JSON.stringify(PHARMA_PRODUCTS));
+  localStorage.setItem('tp_pharma', JSON.stringify(PHARMA_LOCAL));
+}
+// Override PHARMA_PRODUCTS reference used in render with a live getter
+function getPharmaProducts(){ return PHARMA_LOCAL; }
+
+// Patch renderPharma and addPharmaToCart to use PHARMA_LOCAL
+const _origRenderPharma = renderPharma;
+function renderPharma(){
+  const container = document.getElementById('pharma-content');
+  if(!container) return;
+
+  // Show/hide admin button
+  const adminBtn = document.getElementById('pharma-admin-btn');
+  if(adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
+
+  let filtered = PHARMA_LOCAL.filter(p => {
+    const matchBrand = pharmaFilterBrand === 'all' || p.brand === pharmaFilterBrand;
+    const matchCat   = pharmaFilterCat   === 'all' || p.cat   === pharmaFilterCat;
+    return matchBrand && matchCat;
+  });
+
+  if(!filtered.length){
+    container.innerHTML = '<div class="pharma-empty">🧬 No products found for this filter.</div>';
+    return;
+  }
+
+  const brands = pharmaFilterBrand === 'all' ? ['deus','astera','biaxol'] : [pharmaFilterBrand];
+  const cats   = pharmaFilterCat   === 'all' ? ['injectable','oral','sarms','peptides','pct'] : [pharmaFilterCat];
+
+  let html = '';
+  brands.forEach(brand => {
+    const brandItems = filtered.filter(p => p.brand === brand);
+    if(!brandItems.length) return;
+    const bm = BRAND_META[brand];
+    html += `<div class="brand-section">`;
+    html += `<div class="brand-header ${bm.cls}">${bm.dot} ${bm.label}</div>`;
+    html += `<div class="pharma-list">`;
+    cats.forEach(cat => {
+      const catItems = brandItems.filter(p => p.cat === cat);
+      if(!catItems.length) return;
+      const cm = CAT_META[cat];
+      html += `<div class="cat-label">${cm.emoji} ${cm.label}</div>`;
+      catItems.forEach(p => {
+        const adminBtns = isAdmin
+          ? `<button class="btn-edit" onclick="event.stopPropagation();openPharmaForm('${p.id}')" style="font-size:.65rem;padding:4px 8px">✏️</button>
+             <button class="btn-del" onclick="event.stopPropagation();deletePharmaProduct('${p.id}')" style="font-size:.65rem;padding:4px 8px">🗑️</button>`
+          : '';
+        const addBtn = p.oos
+          ? '<span class="oos-badge">Out of Stock</span>'
+          : `<button class="pharma-add-btn" onclick="event.stopPropagation();addPharmaToCart('${p.id}')">+</button>`;
+        html += `
+          <div class="pharma-item${p.oos?' out-of-stock':''}">
+            <div class="pharma-item-emoji">${p.emoji}</div>
+            <div class="pharma-item-info">
+              <div class="pharma-item-name">${p.name}</div>
+              <div class="pharma-item-brand">${BRAND_META[p.brand].label}</div>
+            </div>
+            <div class="pharma-item-right" style="gap:6px">
+              <div class="pharma-price">€${p.price}</div>
+              ${adminBtns}
+              ${addBtn}
+            </div>
+          </div>`;
+      });
+    });
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+}
+window.renderPharma = renderPharma;
+
+function openPharmaAdminPanel(){
+  renderPharmaAdminList();
+  document.getElementById('pharma-admin-panel').classList.add('open');
+}
+
+function renderPharmaAdminList(){
+  const list = document.getElementById('pharma-admin-list');
+  if(!list) return;
+  if(!PHARMA_LOCAL.length){
+    list.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;font-size:.85rem">No pharma products yet</div>';
+    return;
+  }
+  const brandLabel = {deus:'🔵 Deus',astera:'🟣 Astera',biaxol:'🟡 Biaxol'};
+  const catLabel   = {injectable:'💉',oral:'💊',sarms:'🧬',peptides:'🧪',pct:'🔄'};
+  list.innerHTML = PHARMA_LOCAL.map(p => `
+    <div class="admin-item">
+      <div class="admin-thumb" style="font-size:1.4rem">${p.emoji}</div>
+      <div class="admin-item-info">
+        <div class="admin-item-name">${p.name}</div>
+        <div class="admin-item-price">${catLabel[p.cat]||''} ${brandLabel[p.brand]||p.brand} · €${p.price}${p.oos?' · <span style="color:#ff7070">OOS</span>':''}</div>
+      </div>
+      <div class="admin-item-actions">
+        <button class="btn-edit" onclick="openPharmaForm('${p.id}')">Edit</button>
+        <button class="btn-del" onclick="deletePharmaProduct('${p.id}')">Del</button>
+      </div>
+    </div>`).join('');
+}
+
+function deletePharmaProduct(id){
+  if(!confirm('Delete this pharma product?')) return;
+  PHARMA_LOCAL = PHARMA_LOCAL.filter(p => p.id !== id);
+  localStorage.setItem('tp_pharma', JSON.stringify(PHARMA_LOCAL));
+  renderPharmaAdminList();
+  renderPharma();
+  showToast('🗑️ Prodotto eliminato');
+}
+
+let editingPharmaId = null;
+function openPharmaForm(id){
+  editingPharmaId = id;
+  const p = id ? PHARMA_LOCAL.find(x => x.id === id) : null;
+  const fc = document.getElementById('pharma-form-content');
+  fc.innerHTML = `
+    <div class="panel-handle"></div>
+    <div class="panel-title">${p ? '✏️ Modifica Prodotto' : '➕ Nuovo Prodotto'}</div>
+    <div class="form-grid">
+      <div class="input-group full"><label>Nome Prodotto</label>
+        <input type="text" id="pf-name" value="${p?.name||''}" placeholder="es. TESTOSTERONE PROPIONATE"></div>
+      <div class="input-group"><label>Prezzo (€)</label>
+        <input type="number" id="pf-price" value="${p?.price||''}" placeholder="36"></div>
+      <div class="input-group"><label>Emoji</label>
+        <input type="text" id="pf-emoji" value="${p?.emoji||'💉'}" placeholder="💉" maxlength="4"></div>
+      <div class="input-group"><label>Brand</label>
+        <select class="select-input" id="pf-brand">
+          ${['deus','astera','biaxol'].map(b=>`<option value="${b}" ${(p?.brand||'deus')===b?'selected':''}>${{deus:'🔵 Deus Medical',astera:'🟣 Astera Labs',biaxol:'🟡 Biaxol'}[b]}</option>`).join('')}
+        </select></div>
+      <div class="input-group"><label>Categoria</label>
+        <select class="select-input" id="pf-cat">
+          ${['injectable','oral','sarms','peptides','pct'].map(c=>`<option value="${c}" ${(p?.cat||'injectable')===c?'selected':''}>${{injectable:'💉 Injectable',oral:'💊 Oral',sarms:'🧬 SARMS',peptides:'🧪 Peptides',pct:'🔄 PCT'}[c]}</option>`).join('')}
+        </select></div>
+      <div class="input-group full" style="flex-direction:row;align-items:center;gap:10px;padding:8px 0">
+        <label style="margin:0;font-size:.82rem;color:var(--muted)">Out of Stock</label>
+        <input type="checkbox" id="pf-oos" ${p?.oos?'checked':''} style="width:18px;height:18px;accent-color:var(--gold);cursor:pointer">
+      </div>
+    </div>
+    <button class="checkout-btn" onclick="savePharmaProduct()">💾 Salva Prodotto</button>
+  `;
+  document.getElementById('pharma-form-panel').classList.add('open');
+}
+
+function savePharmaProduct(){
+  const name  = document.getElementById('pf-name').value.trim();
+  const price = parseFloat(document.getElementById('pf-price').value);
+  if(!name || !price){ showToast('⚠️ Nome e prezzo obbligatori'); return; }
+  const prod = {
+    id:    editingPharmaId || ('custom_' + Date.now()),
+    name:  name.toUpperCase(),
+    brand: document.getElementById('pf-brand').value,
+    cat:   document.getElementById('pf-cat').value,
+    emoji: document.getElementById('pf-emoji').value || '💉',
+    price: price,
+    oos:   document.getElementById('pf-oos').checked,
+  };
+  if(editingPharmaId){
+    const idx = PHARMA_LOCAL.findIndex(x => x.id === editingPharmaId);
+    if(idx !== -1) PHARMA_LOCAL[idx] = prod;
+  } else {
+    PHARMA_LOCAL.push(prod);
+  }
+  localStorage.setItem('tp_pharma', JSON.stringify(PHARMA_LOCAL));
+  closePanel('pharma-form-panel');
+  renderPharmaAdminList();
+  renderPharma();
+  showToast(editingPharmaId ? '✅ Prodotto aggiornato!' : '✅ Prodotto aggiunto!');
+}
+
+// Also patch addPharmaToCart to use PHARMA_LOCAL
+function addPharmaToCart(id){
+  const p = PHARMA_LOCAL.find(x => x.id === id);
+  if(!p || p.oos) return;
+  const cartId = 'pharma_' + p.id;
+  const e = cart.find(x => x.id === cartId);
+  if(e) e.qty += 1;
+  else cart.push({id: cartId, qty: 1, pharmaRef: id});
+  saveCart(); updateCartUI(); showToast('✅ ' + p.name + ' aggiunto!');
+}
+window.addPharmaToCart = addPharmaToCart;
+
+window.openPharmaAdminPanel = openPharmaAdminPanel;
+window.renderPharmaAdminList = renderPharmaAdminList;
+window.deletePharmaProduct = deletePharmaProduct;
+window.openPharmaForm = openPharmaForm;
+window.savePharmaProduct = savePharmaProduct;
 
 window.showView=showView; window.openCart=openCart; window.closePanel=closePanel;
 window.setFilter=setFilter; window.filterProducts=filterProducts;
