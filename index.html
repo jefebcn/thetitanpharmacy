@@ -768,7 +768,8 @@ let PRODUCTS = [];
 let cart = JSON.parse(localStorage.getItem('tp_cart') || '[]');
 let orders = JSON.parse(localStorage.getItem('tp_orders') || '[]');
 let currentUser = localStorage.getItem('tp_user') || null;
-let isAdmin = localStorage.getItem('tp_admin') === '1';
+let isAdmin = (localStorage.getItem('tp_admin') === '1') &&
+              (localStorage.getItem('tp_admin_user') === localStorage.getItem('tp_user'));
 let currentFilter = 'all';
 let detailQty = 1;
 let editingProductId = null;
@@ -1089,6 +1090,9 @@ function renderOrders(){
 
 // ===== ACCOUNT =====
 function renderAccount(){
+  // Always re-sync isAdmin from storage before rendering
+  isAdmin = (localStorage.getItem('tp_admin') === '1') &&
+            (localStorage.getItem('tp_admin_user') === localStorage.getItem('tp_user'));
   const c=document.getElementById('account-content');
   if(currentUser){
     c.innerHTML=`
@@ -1132,18 +1136,25 @@ function renderAccount(){
 function openLoginPanel(){ closePanel('login-panel'); document.getElementById('login-panel').classList.add('open'); }
 function doLogin(){
   const u=document.getElementById('login-user').value.trim();
-  const p=document.getElementById('login-pass').value;
+  const p=document.getElementById('login-pass').value.trim();
   if(!u||!p){ showToast('⚠️ Inserisci username e password'); return; }
   currentUser=u;
   localStorage.setItem('tp_user',u);
-  if(u===ADMIN_USER&&p===ADMIN_PASS){
-    isAdmin=true; localStorage.setItem('tp_admin','1');
-  } else { isAdmin=false; localStorage.removeItem('tp_admin'); }
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    isAdmin=true;
+    localStorage.setItem('tp_admin','1');
+    localStorage.setItem('tp_admin_user', u);
+  } else {
+    isAdmin=false;
+    localStorage.removeItem('tp_admin');
+    localStorage.removeItem('tp_admin_user');
+  }
   closePanel('login-panel');
   renderAccount();
-  showToast('✅ Benvenuto, '+u+'!');
+  // Update FAB
   const fab=document.getElementById('admin-fab');
-  if(fab && isAdmin) fab.classList.add('visible');
+  if(fab) fab.classList.toggle('visible', isAdmin);
+  showToast(isAdmin ? '👑 Benvenuto Admin, '+u+'!' : '✅ Benvenuto, '+u+'!');
 }
 function doLogout(){
   currentUser=null; isAdmin=false;
