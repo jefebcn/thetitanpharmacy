@@ -452,6 +452,48 @@
 
   textarea{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:.88rem;outline:none;resize:none;width:100%;}
   textarea:focus{border-color:rgba(232,184,75,.4);}
+  /* ===== PHARMA VIEW ===== */
+  .pharma-view{padding:0 0 110px;flex-direction:column;gap:0;display:none;}
+  .pharma-hero{margin:16px 16px 0;border-radius:var(--radius);padding:16px 18px;background:linear-gradient(135deg,#0d1a2e,#112240);border:1px solid rgba(124,156,245,.25);display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+  .pharma-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(124,156,245,.05),transparent);animation:shimmer 3s ease-in-out infinite;}
+  .pharma-hero-icon{font-size:2rem;flex-shrink:0;}
+  .pharma-hero-title{font-family:'Fredoka One',cursive;font-size:1rem;color:#a8c4ff;letter-spacing:.5px;}
+  .pharma-hero-sub{font-size:.72rem;color:var(--muted);margin-top:2px;}
+  .brand-tabs{display:flex;gap:8px;padding:14px 16px 6px;overflow-x:auto;scrollbar-width:none;}
+  .brand-tabs::-webkit-scrollbar{display:none;}
+  .brand-tab{background:var(--bg3);border:1px solid var(--border);border-radius:30px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;transition:.2s;font-family:inherit;}
+  .brand-tab.active-all{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0e0b1e;border-color:var(--gold);box-shadow:var(--glow-gold);}
+  .brand-tab.active-deus{background:#1a3a6e;color:#7cb4ff;border-color:#3a7aee;box-shadow:0 0 10px rgba(60,122,238,.3);}
+  .brand-tab.active-astera{background:#3a1a6e;color:#c47cff;border-color:#8a3aee;box-shadow:0 0 10px rgba(138,58,238,.3);}
+  .brand-tab.active-biaxol{background:#3a2a00;color:#f5c842;border-color:#c49430;box-shadow:0 0 10px rgba(196,148,48,.3);}
+  .brand-tab:hover{border-color:var(--gold);color:var(--text);}
+  .cat-tabs{display:flex;gap:6px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;}
+  .cat-tabs::-webkit-scrollbar{display:none;}
+  .cat-tab{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.72rem;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;transition:.2s;font-family:inherit;}
+  .cat-tab.active{background:rgba(232,184,75,.15);color:var(--gold);border-color:rgba(232,184,75,.4);}
+  .cat-tab:hover:not(.active){border-color:var(--gold);color:var(--text);}
+  .brand-section{margin:8px 16px 0;}
+  .brand-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px 12px 0 0;font-family:'Fredoka One',cursive;font-size:.88rem;letter-spacing:.5px;}
+  .brand-header.deus{background:linear-gradient(135deg,#0d1e40,#112a5a);color:#7cb4ff;border:1px solid rgba(60,122,238,.2);border-bottom:none;}
+  .brand-header.astera{background:linear-gradient(135deg,#1a0d40,#241258);color:#c47cff;border:1px solid rgba(138,58,238,.2);border-bottom:none;}
+  .brand-header.biaxol{background:linear-gradient(135deg,#201600,#2e2000);color:var(--gold);border:1px solid rgba(196,148,48,.2);border-bottom:none;}
+  .cat-label{padding:6px 14px 4px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);background:var(--bg3);border-left:1px solid var(--border);border-right:1px solid var(--border);}
+  .pharma-list{background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;margin-bottom:16px;}
+  .pharma-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;position:relative;}
+  .pharma-item:last-child{border-bottom:none;}
+  .pharma-item:hover{background:rgba(232,184,75,.04);}
+  .pharma-item.out-of-stock{opacity:.5;}
+  .pharma-item-emoji{font-size:1.4rem;flex-shrink:0;width:32px;text-align:center;}
+  .pharma-item-info{flex:1;min-width:0;}
+  .pharma-item-name{font-family:'Fredoka One',cursive;font-size:.88rem;font-weight:400;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .pharma-item-brand{font-size:.65rem;color:var(--muted);margin-top:1px;}
+  .pharma-item-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .pharma-price{color:var(--gold);font-weight:700;font-size:.88rem;text-shadow:var(--glow-gold-sm);}
+  .oos-badge{background:rgba(232,59,59,.15);color:#ff7070;border:1px solid rgba(232,59,59,.3);border-radius:6px;padding:2px 7px;font-size:.6rem;font-weight:700;}
+  .pharma-add-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#0e0b1e;font-weight:700;transition:.2s;flex-shrink:0;box-shadow:var(--glow-gold-sm);}
+  .pharma-add-btn:hover{transform:scale(1.15);}
+  .pharma-empty{text-align:center;color:var(--muted);padding:32px;font-size:.85rem;}
+
 </style>
 </head>
 <body>
@@ -534,6 +576,33 @@
     <div id="account-content"></div>
   </div>
 
+
+  <!-- PHARMA VIEW -->
+  <div class="pharma-view" id="pharma-view">
+    <div class="pharma-hero">
+      <div class="pharma-hero-icon">💉</div>
+      <div>
+        <div class="pharma-hero-title">PHARMA & PERFORMANCE</div>
+        <div class="pharma-hero-sub">Injectable · Oral · SARMS · Peptides · PCT — Professional grade</div>
+      </div>
+    </div>
+    <div class="brand-tabs" id="pharma-brand-tabs">
+      <button class="brand-tab active-all" onclick="setPharmaFilter('brand','all',this)">🔥 All</button>
+      <button class="brand-tab" onclick="setPharmaFilter('brand','deus',this)">🔵 Deus Medical</button>
+      <button class="brand-tab" onclick="setPharmaFilter('brand','astera',this)">🟣 Astera Labs</button>
+      <button class="brand-tab" onclick="setPharmaFilter('brand','biaxol',this)">🟡 Biaxol</button>
+    </div>
+    <div class="cat-tabs" id="pharma-cat-tabs">
+      <button class="cat-tab active" onclick="setPharmaFilter('cat','all',this)">All Types</button>
+      <button class="cat-tab" onclick="setPharmaFilter('cat','injectable',this)">💉 Injectable</button>
+      <button class="cat-tab" onclick="setPharmaFilter('cat','oral',this)">💊 Oral</button>
+      <button class="cat-tab" onclick="setPharmaFilter('cat','sarms',this)">🧬 SARMS</button>
+      <button class="cat-tab" onclick="setPharmaFilter('cat','peptides',this)">🧪 Peptides</button>
+      <button class="cat-tab" onclick="setPharmaFilter('cat','pct',this)">🔄 PCT</button>
+    </div>
+    <div id="pharma-content"></div>
+  </div>
+
   <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-catalog" onclick="showView('catalog')">
@@ -547,6 +616,10 @@
     <div class="nav-item" id="nav-orders" onclick="showView('orders')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
       Ordini
+    </div>
+    <div class="nav-item" id="nav-pharma" onclick="showView('pharma')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+      Pharma
     </div>
     <div class="nav-item" id="nav-account" onclick="showView('account')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -786,16 +859,15 @@ function buildMarquee(){
 
 // ===== VIEWS =====
 function showView(view){
-  ['catalog','orders','account'].forEach(v=>{
-    document.getElementById(v+'-view').style.display = v===view ? (v==='catalog'?'flex':'flex') : 'none';
-    document.getElementById(v+'-view').style.flexDirection = 'column';
-    const nav = document.getElementById('nav-'+(v==='catalog'?'catalog':v));
+  ['catalog','orders','account','pharma'].forEach(v=>{
+    const el = document.getElementById(v+'-view');
+    if(el) el.style.display = v===view ? 'flex' : 'none';
+    if(el) el.style.flexDirection = 'column';
+    const nav = document.getElementById('nav-'+v);
     if(nav) nav.classList.toggle('active', v===view);
   });
-  document.getElementById('nav-catalog').classList.toggle('active', view==='catalog');
-  document.getElementById('nav-orders').classList.toggle('active', view==='orders');
-  document.getElementById('nav-account').classList.toggle('active', view==='account');
   if(view==='account') renderAccount();
+  if(view==='pharma') renderPharma();
 }
 
 // Init view
@@ -803,6 +875,7 @@ document.getElementById('catalog-view').style.display='flex';
 document.getElementById('catalog-view').style.flexDirection='column';
 document.getElementById('orders-view').style.display='none';
 document.getElementById('account-view').style.display='none';
+document.getElementById('pharma-view').style.display='none';
 
 // ===== PRODUCTS =====
 function setFilter(el, filter){
@@ -955,11 +1028,23 @@ function renderCartPanel(){
 // ===== ORDERS =====
 function placeOrder(){
   const note=document.getElementById('order-note').value;
-  const tot=cart.reduce((s,x)=>{const p=PRODUCTS.find(px=>px.id===x.id);return s+p.price*x.qty;},0);
+  const tot=cart.reduce((s,x)=>{
+    if(String(x.id).startsWith('pharma_')){
+      const pp=PHARMA_PRODUCTS.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
+      return s+(pp?pp.price*x.qty:0);
+    }
+    const p=PRODUCTS.find(px=>String(px.id)===String(x.id));return s+(p?p.price*x.qty:0);
+  },0);
   const o={
     id:'TP-'+Date.now().toString(36).toUpperCase(),
     date:new Date().toLocaleDateString('en-GB'),
-    items:cart.map(x=>{const p=PRODUCTS.find(px=>px.id===x.id);return`${p.name} ×${x.qty}`;}).join(', '),
+    items:cart.map(x=>{
+      if(String(x.id).startsWith('pharma_')){
+        const pp=PHARMA_PRODUCTS.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
+        return pp?`${pp.name} ×${x.qty}`:'?';
+      }
+      const p=PRODUCTS.find(px=>String(px.id)===String(x.id));return p?`${p.name} ×${x.qty}`:'?';
+    }).join(', '),
     total:tot, status:'pending', note
   };
   orders.unshift(o);
@@ -1185,6 +1270,272 @@ function dismissSplash(){
 }
 window.dismissSplash = dismissSplash;
 setTimeout(dismissSplash, 2800);
+
+
+// ===== PHARMA DATA =====
+const PHARMA_PRODUCTS = [
+  // --- DEUS MEDICAL — INJECTABLE ---
+  {id:'d1',name:'TESTOMED E 250',brand:'deus',cat:'injectable',emoji:'💉',price:43,oos:false},
+  {id:'d2',name:'3-TRENBOMED 150',brand:'deus',cat:'injectable',emoji:'💉',price:70,oos:false},
+  {id:'d3',name:'DECAMED 250',brand:'deus',cat:'injectable',emoji:'💉',price:56,oos:false},
+  {id:'d4',name:'PRIMOMED 100',brand:'deus',cat:'injectable',emoji:'💉',price:86,oos:false},
+  {id:'d5',name:'TESTOMED C 250',brand:'deus',cat:'injectable',emoji:'💉',price:43,oos:false},
+  {id:'d6',name:'SUSTAMED 250',brand:'deus',cat:'injectable',emoji:'💉',price:46,oos:false},
+  {id:'d7',name:'MASTERMED E 200',brand:'deus',cat:'injectable',emoji:'💉',price:68,oos:false},
+  {id:'d8',name:'EQUIMED 250',brand:'deus',cat:'injectable',emoji:'💉',price:52,oos:false},
+  {id:'d9',name:'DHB-MED 100',brand:'deus',cat:'injectable',emoji:'💉',price:68,oos:false},
+  {id:'d10',name:'MASTERMED P 100',brand:'deus',cat:'injectable',emoji:'💉',price:54,oos:false},
+  {id:'d11',name:'DECAMED PP 100',brand:'deus',cat:'injectable',emoji:'💉',price:42,oos:false},
+  {id:'d12',name:'TESTOMED 100',brand:'deus',cat:'injectable',emoji:'💉',price:38,oos:false},
+  {id:'d13',name:'TESTOMED P 100',brand:'deus',cat:'injectable',emoji:'💉',price:36,oos:false},
+  {id:'d14',name:'WATERMED',brand:'deus',cat:'injectable',emoji:'💉',price:14,oos:false},
+  {id:'d15',name:'TRENBOMED E 200',brand:'deus',cat:'injectable',emoji:'💉',price:68,oos:false},
+  {id:'d16',name:'TRENBOMED A 100',brand:'deus',cat:'injectable',emoji:'💉',price:61,oos:false},
+  {id:'d17',name:'DIANAMED 100',brand:'deus',cat:'injectable',emoji:'💉',price:49,oos:false},
+  {id:'d18',name:'PARAMED 76.5',brand:'deus',cat:'injectable',emoji:'💉',price:68,oos:false},
+  {id:'d19',name:'TESTOMED U 250',brand:'deus',cat:'injectable',emoji:'💉',price:41,oos:false},
+  // --- DEUS MEDICAL — ORAL ---
+  {id:'d20',name:'ANAVAMED 10',brand:'deus',cat:'oral',emoji:'💊',price:31,oos:false},
+  {id:'d21',name:'DIANAMED 10',brand:'deus',cat:'oral',emoji:'💊',price:16,oos:false},
+  {id:'d22',name:'ANADROMED 50',brand:'deus',cat:'oral',emoji:'💊',price:37,oos:false},
+  {id:'d23',name:'WINIMED 10',brand:'deus',cat:'oral',emoji:'💊',price:19,oos:false},
+  {id:'d24',name:'PROVIMED 25',brand:'deus',cat:'oral',emoji:'💊',price:31,oos:false},
+  {id:'d25',name:'TURIMED 10',brand:'deus',cat:'oral',emoji:'💊',price:23,oos:false},
+  {id:'d26',name:'HALOMED 5',brand:'deus',cat:'oral',emoji:'💊',price:62,oos:false},
+  {id:'d27',name:'CABERMED 0.5',brand:'deus',cat:'oral',emoji:'💊',price:82,oos:false},
+  {id:'d28',name:'PRIMOMED 25',brand:'deus',cat:'oral',emoji:'💊',price:103,oos:false},
+  {id:'d29',name:'SUPERMED 10',brand:'deus',cat:'oral',emoji:'💊',price:56,oos:false},
+  {id:'d30',name:'NEBIMED 5',brand:'deus',cat:'oral',emoji:'💊',price:21,oos:false},
+  {id:'d31',name:'TELMIMED 40',brand:'deus',cat:'oral',emoji:'💊',price:27,oos:false},
+  // --- DEUS MEDICAL — SARMS ---
+  {id:'d32',name:'MK677 10',brand:'deus',cat:'sarms',emoji:'🧬',price:62,oos:false},
+  {id:'d33',name:'GW501516 10',brand:'deus',cat:'sarms',emoji:'🧬',price:56,oos:false},
+  {id:'d34',name:'MK2866 10',brand:'deus',cat:'sarms',emoji:'🧬',price:44,oos:false},
+  // --- DEUS MEDICAL — PEPTIDES ---
+  {id:'d35',name:'DEUSTROPIN 4/12 HGH 120iu',brand:'deus',cat:'peptides',emoji:'🧪',price:258,oos:false},
+  {id:'d36',name:'BPC-157',brand:'deus',cat:'peptides',emoji:'🧪',price:48,oos:false},
+  {id:'d37',name:'HCG',brand:'deus',cat:'peptides',emoji:'🧪',price:54,oos:false},
+  {id:'d38',name:'SEMAGLUTIDE',brand:'deus',cat:'peptides',emoji:'🧪',price:136,oos:false},
+  {id:'d39',name:'CJC-1295 DAC',brand:'deus',cat:'peptides',emoji:'🧪',price:41,oos:false},
+  {id:'d40',name:'IPAMORELIN',brand:'deus',cat:'peptides',emoji:'🧪',price:27,oos:false},
+  {id:'d41',name:'HGH FRAGMENT 176-191',brand:'deus',cat:'peptides',emoji:'🧪',price:54,oos:false},
+  {id:'d42',name:'TB-500',brand:'deus',cat:'peptides',emoji:'🧪',price:41,oos:false},
+  {id:'d43',name:'PT-141',brand:'deus',cat:'peptides',emoji:'🧪',price:41,oos:false},
+  {id:'d44',name:'EPITHALON',brand:'deus',cat:'peptides',emoji:'🧪',price:41,oos:false},
+  // --- DEUS MEDICAL — PCT ---
+  {id:'d45',name:'CLOMIMED 50',brand:'deus',cat:'pct',emoji:'🔄',price:28,oos:false},
+  {id:'d46',name:'ENCLOMIMED 25',brand:'deus',cat:'pct',emoji:'🔄',price:82,oos:false},
+  {id:'d47',name:'ARIMIMED 1',brand:'deus',cat:'pct',emoji:'🔄',price:37,oos:false},
+  {id:'d48',name:'AROMAMED 25',brand:'deus',cat:'pct',emoji:'🔄',price:41,oos:false},
+  {id:'d49',name:'NOLVAMED 20',brand:'deus',cat:'pct',emoji:'🔄',price:31,oos:false},
+
+  // --- ASTERA LABS — INJECTABLE ---
+  {id:'a1',name:'TESTOSTERONE PROPIONATE',brand:'astera',cat:'injectable',emoji:'💉',price:36,oos:false},
+  {id:'a2',name:'TESTOSTERONE PHENYLPROPIONATE',brand:'astera',cat:'injectable',emoji:'💉',price:36,oos:false},
+  {id:'a3',name:'NANDROLONE PHENYLPROPIONATE NPP',brand:'astera',cat:'injectable',emoji:'💉',price:42,oos:false},
+  {id:'a4',name:'NANDROLONE DECANOATE',brand:'astera',cat:'injectable',emoji:'💉',price:62,oos:false},
+  {id:'a5',name:'SUSTANON 300MG',brand:'astera',cat:'injectable',emoji:'💉',price:52,oos:false},
+  {id:'a6',name:'SUSTANON 500MG',brand:'astera',cat:'injectable',emoji:'💉',price:82,oos:false},
+  {id:'a7',name:'BOLDENONE UNDECYLENATE',brand:'astera',cat:'injectable',emoji:'💉',price:59,oos:false},
+  {id:'a8',name:'METHENOLONE ENANTHATE 100',brand:'astera',cat:'injectable',emoji:'💉',price:80,oos:false},
+  {id:'a9',name:'METHENOLONE ENANTHATE 200',brand:'astera',cat:'injectable',emoji:'💉',price:154,oos:false},
+  {id:'a10',name:'TRENBOLONE ACETATE',brand:'astera',cat:'injectable',emoji:'💉',price:61,oos:false},
+  {id:'a11',name:'TRENBOLONE ENANTHATE',brand:'astera',cat:'injectable',emoji:'💉',price:68,oos:false},
+  {id:'a12',name:'STANOZOLOL injectable',brand:'astera',cat:'injectable',emoji:'💉',price:44,oos:false},
+  {id:'a13',name:'L-CARNITINE',brand:'astera',cat:'injectable',emoji:'💉',price:20,oos:false},
+  {id:'a14',name:'BACTERIOSTATIC WATER',brand:'astera',cat:'injectable',emoji:'💉',price:14,oos:false},
+  // --- ASTERA LABS — ORAL ---
+  {id:'a15',name:'OXANDROLONE',brand:'astera',cat:'oral',emoji:'💊',price:122,oos:false},
+  {id:'a16',name:'METHANDIENONE',brand:'astera',cat:'oral',emoji:'💊',price:62,oos:false},
+  {id:'a17',name:'MESTEROLONE',brand:'astera',cat:'oral',emoji:'💊',price:82,oos:false},
+  {id:'a18',name:'STANOZOLOL oral',brand:'astera',cat:'oral',emoji:'💊',price:68,oos:false},
+  {id:'a19',name:'METHYLDROSTANOLONE SUPERDROL',brand:'astera',cat:'oral',emoji:'💊',price:56,oos:false},
+  {id:'a20',name:'TURINABOL',brand:'astera',cat:'oral',emoji:'💊',price:89,oos:false},
+  {id:'a21',name:'OXYMETHOLONE',brand:'astera',cat:'oral',emoji:'💊',price:41,oos:false},
+  {id:'a22',name:'SIBUTRAMINE',brand:'astera',cat:'oral',emoji:'💊',price:68,oos:false},
+  {id:'a23',name:'CABERGOLINE',brand:'astera',cat:'oral',emoji:'💊',price:109,oos:false},
+  {id:'a24',name:'METHYL-1-TESTOSTERONE',brand:'astera',cat:'oral',emoji:'💊',price:41,oos:false},
+  {id:'a25',name:'FLUOXYMESTERONE HALOTESTIN',brand:'astera',cat:'oral',emoji:'💊',price:62,oos:false},
+  {id:'a26',name:'MIBOLERONE CHEQUE DROPS',brand:'astera',cat:'oral',emoji:'💊',price:82,oos:false},
+  {id:'a27',name:'METHYLTRENBOLONE',brand:'astera',cat:'oral',emoji:'💊',price:62,oos:false},
+  {id:'a28',name:'17A-METHYLTESTOSTERONE',brand:'astera',cat:'oral',emoji:'💊',price:48,oos:true},
+  // --- ASTERA LABS — SARMS ---
+  {id:'a29',name:'MK677',brand:'astera',cat:'sarms',emoji:'🧬',price:48,oos:false},
+  {id:'a30',name:'MK2866',brand:'astera',cat:'sarms',emoji:'🧬',price:37,oos:false},
+  {id:'a31',name:'GW501516',brand:'astera',cat:'sarms',emoji:'🧬',price:43,oos:false},
+  // --- ASTERA LABS — PEPTIDES ---
+  {id:'a32',name:'HCG',brand:'astera',cat:'peptides',emoji:'🧪',price:54,oos:false},
+  {id:'a33',name:'TB500 & BPC157 combo',brand:'astera',cat:'peptides',emoji:'🧪',price:136,oos:false},
+  {id:'a34',name:'MELANOTAN 2',brand:'astera',cat:'peptides',emoji:'🧪',price:41,oos:false},
+  {id:'a35',name:'HGH FRAGMENT 176-191',brand:'astera',cat:'peptides',emoji:'🧪',price:95,oos:false},
+  {id:'a36',name:'HGH',brand:'astera',cat:'peptides',emoji:'🧪',price:340,oos:true},
+  // --- ASTERA LABS — PCT ---
+  {id:'a37',name:'TAMOXIFEN CITRATE',brand:'astera',cat:'pct',emoji:'🔄',price:30,oos:false},
+  {id:'a38',name:'ANASTROZOLE',brand:'astera',cat:'pct',emoji:'🔄',price:37,oos:false},
+  {id:'a39',name:'CLOMIPHENE CITRATE',brand:'astera',cat:'pct',emoji:'🔄',price:35,oos:false},
+  {id:'a40',name:'EXEMESTANE',brand:'astera',cat:'pct',emoji:'🔄',price:74,oos:false},
+  {id:'a41',name:'LETROZOLE',brand:'astera',cat:'pct',emoji:'🔄',price:17,oos:false},
+
+  // --- BIAXOL — SARMS ---
+  {id:'b1',name:'YK11',brand:'biaxol',cat:'sarms',emoji:'🧬',price:89,oos:false},
+  {id:'b2',name:'ANDARINE S4',brand:'biaxol',cat:'sarms',emoji:'🧬',price:74,oos:false},
+  {id:'b3',name:'CARDARINE GW501516',brand:'biaxol',cat:'sarms',emoji:'🧬',price:67,oos:false},
+  {id:'b4',name:'IBUTAMOREN MK677',brand:'biaxol',cat:'sarms',emoji:'🧬',price:74,oos:false},
+  {id:'b5',name:'LIGANDROL LGD4033',brand:'biaxol',cat:'sarms',emoji:'🧬',price:74,oos:false},
+  {id:'b6',name:'OSTARINE MK2866',brand:'biaxol',cat:'sarms',emoji:'🧬',price:74,oos:false},
+  {id:'b7',name:'S23',brand:'biaxol',cat:'sarms',emoji:'🧬',price:74,oos:false},
+  {id:'b8',name:'STENABOLIC SR9009',brand:'biaxol',cat:'sarms',emoji:'🧬',price:74,oos:false},
+  {id:'b9',name:'TESTOLONE RAD140',brand:'biaxol',cat:'sarms',emoji:'🧬',price:82,oos:false},
+  // --- BIAXOL — PEPTIDES ---
+  {id:'b10',name:'MELANOTAN II Nasal Spray',brand:'biaxol',cat:'peptides',emoji:'🧪',price:59,oos:false},
+  {id:'b11',name:'BPC-157 Capsules',brand:'biaxol',cat:'peptides',emoji:'🧪',price:119,oos:true},
+  {id:'b12',name:'KPV Capsules',brand:'biaxol',cat:'peptides',emoji:'🧪',price:148,oos:true},
+  {id:'b13',name:'GLP-1 BOOSTER Capsules',brand:'biaxol',cat:'peptides',emoji:'🧪',price:62,oos:true},
+  // --- BIAXOL — PCT ---
+  {id:'b14',name:'PCT IN CAPSULES',brand:'biaxol',cat:'pct',emoji:'🔄',price:74,oos:true},
+  {id:'b15',name:'CYCLE SUPPORT',brand:'biaxol',cat:'pct',emoji:'🔄',price:44,oos:true},
+];
+
+const BRAND_META = {
+  deus:   {label:'Deus Medical', cls:'deus', dot:'🔵'},
+  astera: {label:'Astera Labs',  cls:'astera', dot:'🟣'},
+  biaxol: {label:'Biaxol',       cls:'biaxol', dot:'🟡'},
+};
+const CAT_META = {
+  injectable:{label:'Injectable Steroids', emoji:'💉'},
+  oral:      {label:'Oral Steroids',       emoji:'💊'},
+  sarms:     {label:'SARMS',               emoji:'🧬'},
+  peptides:  {label:'Peptides & HGH',      emoji:'🧪'},
+  pct:       {label:'Post Cycle Therapy',  emoji:'🔄'},
+};
+
+let pharmaFilterBrand = 'all';
+let pharmaFilterCat   = 'all';
+
+function setPharmaFilter(type, value, el){
+  if(type === 'brand'){
+    pharmaFilterBrand = value;
+    document.querySelectorAll('.brand-tab').forEach(t => {
+      t.className = 'brand-tab';
+    });
+    const cls = value === 'all' ? 'active-all' : ('active-' + value);
+    el.classList.add(cls);
+  } else {
+    pharmaFilterCat = value;
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  renderPharma();
+}
+
+function renderPharma(){
+  const container = document.getElementById('pharma-content');
+  if(!container) return;
+
+  let filtered = PHARMA_PRODUCTS.filter(p => {
+    const matchBrand = pharmaFilterBrand === 'all' || p.brand === pharmaFilterBrand;
+    const matchCat   = pharmaFilterCat   === 'all' || p.cat   === pharmaFilterCat;
+    return matchBrand && matchCat;
+  });
+
+  if(!filtered.length){
+    container.innerHTML = '<div class="pharma-empty">🧬 No products found for this filter.</div>';
+    return;
+  }
+
+  // Group: by brand → by category
+  const brands = pharmaFilterBrand === 'all' ? ['deus','astera','biaxol'] : [pharmaFilterBrand];
+  const cats   = pharmaFilterCat   === 'all' ? ['injectable','oral','sarms','peptides','pct'] : [pharmaFilterCat];
+
+  let html = '';
+  brands.forEach(brand => {
+    const brandItems = filtered.filter(p => p.brand === brand);
+    if(!brandItems.length) return;
+    const bm = BRAND_META[brand];
+    html += `<div class="brand-section">`;
+    html += `<div class="brand-header ${bm.cls}">${bm.dot} ${bm.label}</div>`;
+    html += `<div class="pharma-list">`;
+    cats.forEach(cat => {
+      const catItems = brandItems.filter(p => p.cat === cat);
+      if(!catItems.length) return;
+      const cm = CAT_META[cat];
+      html += `<div class="cat-label">${cm.emoji} ${cm.label}</div>`;
+      catItems.forEach(p => {
+        const oosHtml = p.oos ? '<span class="oos-badge">Out of Stock</span>' : `<button class="pharma-add-btn" onclick="event.stopPropagation();addPharmaToCart('${p.id}')">+</button>`;
+        html += `
+          <div class="pharma-item${p.oos?' out-of-stock':''}" onclick="${p.oos?'':'addPharmaToCart(\''+p.id+'\')'}" >
+            <div class="pharma-item-emoji">${p.emoji}</div>
+            <div class="pharma-item-info">
+              <div class="pharma-item-name">${p.name}</div>
+              <div class="pharma-item-brand">${BRAND_META[p.brand].label}</div>
+            </div>
+            <div class="pharma-item-right">
+              <div class="pharma-price">€${p.price}</div>
+              ${oosHtml}
+            </div>
+          </div>`;
+      });
+    });
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function addPharmaToCart(id){
+  const p = PHARMA_PRODUCTS.find(x => x.id === id);
+  if(!p || p.oos) return;
+  // Reuse cart system — prefix pharma IDs to avoid collision
+  const cartId = 'pharma_' + p.id;
+  const e = cart.find(x => x.id === cartId);
+  if(e) e.qty += 1;
+  else cart.push({id: cartId, qty: 1, pharmaRef: id});
+  saveCart(); updateCartUI(); showToast('✅ ' + p.name + ' aggiunto!');
+}
+
+// Override renderCartPanel to handle pharma items
+const _origRenderCartPanel = renderCartPanel;
+function renderCartPanel(){
+  const list = document.getElementById('cart-items-list');
+  const btn  = document.getElementById('checkout-btn');
+  const totalRow  = document.getElementById('cart-total-row');
+  const noteWrap  = document.getElementById('cart-note-wrap');
+  if(!cart.length){
+    list.innerHTML = '<div class="empty-cart"><div>🛒</div>Il carrello è vuoto</div>';
+    totalRow.style.display='none'; noteWrap.style.display='none'; btn.disabled=true; return;
+  }
+  let tot = 0;
+  let rows = cart.map(item => {
+    let p, name, emoji, price;
+    if(String(item.id).startsWith('pharma_')){
+      p = PHARMA_PRODUCTS.find(x => x.id === item.pharmaRef || ('pharma_'+x.id) === item.id);
+      if(!p) return '';
+      name = p.name; emoji = p.emoji; price = p.price;
+    } else {
+      p = PRODUCTS.find(x => String(x.id) === String(item.id));
+      if(!p) return '';
+      name = p.name; emoji = p.emoji || '🌿'; price = p.price;
+    }
+    tot += price * item.qty;
+    return `<div class="cart-item">
+      <div class="cart-item-thumb">${p.photo?`<img src="${p.photo}">`:(emoji||'🌿')}</div>
+      <div class="cart-item-info"><div class="cart-item-name">${name}</div><div class="cart-item-price">€${price} × ${item.qty}</div></div>
+      <div class="cart-qty">
+        <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+  list.innerHTML = rows;
+  totalRow.style.display='flex'; noteWrap.style.display='block';
+  document.getElementById('cart-total-amount').textContent = '€'+(tot+15);
+  btn.disabled = false;
+}
+window.renderCartPanel = renderCartPanel;
+window.addPharmaToCart = addPharmaToCart;
+window.setPharmaFilter = setPharmaFilter;
+window.renderPharma = renderPharma;
 
 window.showView=showView; window.openCart=openCart; window.closePanel=closePanel;
 window.setFilter=setFilter; window.filterProducts=filterProducts;
