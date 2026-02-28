@@ -415,6 +415,22 @@
 
   textarea{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:.88rem;outline:none;resize:none;width:100%;}
   textarea:focus{border-color:rgba(232,184,75,.4);}
+
+  /* Admin FAB */
+  .admin-fab{
+    position:fixed;bottom:82px;right:calc(50% - 228px);z-index:150;
+    width:48px;height:48px;border-radius:50%;
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    border:none;cursor:pointer;
+    display:none;align-items:center;justify-content:center;
+    font-size:1.5rem;color:#0e0b1e;font-weight:900;
+    box-shadow:var(--glow-gold), 0 4px 14px rgba(0,0,0,.4);
+    transition:.2s;
+  }
+  .admin-fab:hover{transform:scale(1.1);}
+  .admin-fab.visible{display:flex;}
+  @media(max-width:480px){.admin-fab{right:16px;}}
+
   /* ===== PHARMA VIEW ===== */
   .pharma-view{padding:0 0 110px;flex-direction:column;gap:0;display:none;}
   .pharma-hero{margin:16px 16px 0;border-radius:var(--radius);padding:16px 18px;background:linear-gradient(135deg,#0d1a2e,#112240);border:1px solid rgba(124,156,245,.25);display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
@@ -562,6 +578,9 @@
     </div>
     <div id="pharma-content"></div>
   </div>
+
+  <!-- ADMIN FAB -->
+  <button class="admin-fab" id="admin-fab" onclick="openProductForm(null)" title="Aggiungi prodotto al catalogo">＋</button>
 
   <!-- BOTTOM NAV -->
   <div class="bottom-nav">
@@ -847,6 +866,9 @@ function showView(view){
   });
   if(view==='account') renderAccount();
   if(view==='pharma') renderPharma();
+  // Show admin FAB only on catalog view
+  const fab = document.getElementById('admin-fab');
+  if(fab) fab.classList.toggle('visible', view==='catalog' && isAdmin);
 }
 
 // Init view
@@ -855,6 +877,7 @@ document.getElementById('catalog-view').style.flexDirection='column';
 document.getElementById('orders-view').style.display='none';
 document.getElementById('account-view').style.display='none';
 document.getElementById('pharma-view').style.display='none';
+if(isAdmin){ const fab=document.getElementById('admin-fab'); if(fab) fab.classList.add('visible'); }
 
 // ===== PRODUCTS =====
 function setFilter(el, filter){
@@ -1074,7 +1097,19 @@ function renderAccount(){
         <div class="profile-name">${currentUser}</div>
         <div class="profile-badge">${isAdmin?'👑 Admin':'⭐ Cliente Fedele'}</div>
       </div>
-      ${isAdmin?`<div class="menu-item" onclick="openAdminPanel()"><div class="menu-icon">⚙️</div><div><h3>Gestisci Prodotti</h3><p>Aggiungi, modifica o rimuovi prodotti</p></div><span class="arrow">›</span></div>`:''}
+      ${isAdmin?`
+      <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.2);border-radius:var(--radius);overflow:hidden;margin-bottom:2px">
+        <div style="padding:10px 14px 6px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold)">⚙️ Admin</div>
+        <div class="menu-item" style="border:none;border-radius:0;border-top:1px solid var(--border)" onclick="openProductForm(null)">
+          <div class="menu-icon">➕</div><div><h3>Aggiungi Prodotto</h3><p>Aggiungi al catalogo principale</p></div><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" style="border:none;border-radius:0;border-top:1px solid var(--border)" onclick="openAdminPanel()">
+          <div class="menu-icon">📋</div><div><h3>Gestisci Catalogo</h3><p>Modifica o rimuovi prodotti</p></div><span class="arrow">›</span>
+        </div>
+        <div class="menu-item" style="border:none;border-radius:0;border-top:1px solid var(--border)" onclick="openPharmaAdminPanel()">
+          <div class="menu-icon">💉</div><div><h3>Gestisci Pharma</h3><p>Modifica o rimuovi prodotti pharma</p></div><span class="arrow">›</span>
+        </div>
+      </div>`:''}
       <div class="menu-item" onclick="showView('orders')"><div class="menu-icon">📋</div><div><h3>I Miei Ordini</h3><p>Visualizza lo storico ordini</p></div><span class="arrow">›</span></div>
       <a class="menu-item" href="https://t.me/titanpharmacyceo" target="_blank" style="text-decoration:none;color:inherit"><div class="menu-icon">💬</div><div><h3>Contattaci su Telegram</h3><p>Rispondiamo in pochi minuti</p></div><span class="arrow">›</span></a>
       <div class="menu-item" onclick="document.getElementById('shipping-panel').classList.add('open')"><div class="menu-icon">🚀</div><div><h3>Info Spedizione</h3><p>Tempi · Tracking · Corrieri · Costi</p></div><span class="arrow">›</span></div>
@@ -1107,11 +1142,16 @@ function doLogin(){
   closePanel('login-panel');
   renderAccount();
   showToast('✅ Benvenuto, '+u+'!');
+  const fab=document.getElementById('admin-fab');
+  if(fab && isAdmin) fab.classList.add('visible');
 }
 function doLogout(){
   currentUser=null; isAdmin=false;
   localStorage.removeItem('tp_user'); localStorage.removeItem('tp_admin');
-  renderAccount(); showToast('👋 Disconnesso');
+  renderAccount();
+  const fab=document.getElementById('admin-fab');
+  if(fab) fab.classList.remove('visible');
+  showToast('👋 Disconnesso');
 }
 
 // ===== ADMIN =====
