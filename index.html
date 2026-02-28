@@ -1397,70 +1397,7 @@ function setPharmaFilter(type, value, el){
   renderPharma();
 }
 
-function renderPharma(){
-  const container = document.getElementById('pharma-content');
-  if(!container) return;
 
-  let filtered = PHARMA_PRODUCTS.filter(p => {
-    const matchBrand = pharmaFilterBrand === 'all' || p.brand === pharmaFilterBrand;
-    const matchCat   = pharmaFilterCat   === 'all' || p.cat   === pharmaFilterCat;
-    return matchBrand && matchCat;
-  });
-
-  if(!filtered.length){
-    container.innerHTML = '<div class="pharma-empty">🧬 No products found for this filter.</div>';
-    return;
-  }
-
-  // Group: by brand → by category
-  const brands = pharmaFilterBrand === 'all' ? ['deus','astera','biaxol'] : [pharmaFilterBrand];
-  const cats   = pharmaFilterCat   === 'all' ? ['injectable','oral','sarms','peptides','pct'] : [pharmaFilterCat];
-
-  let html = '';
-  brands.forEach(brand => {
-    const brandItems = filtered.filter(p => p.brand === brand);
-    if(!brandItems.length) return;
-    const bm = BRAND_META[brand];
-    html += `<div class="brand-section">`;
-    html += `<div class="brand-header ${bm.cls}">${bm.dot} ${bm.label}</div>`;
-    html += `<div class="pharma-list">`;
-    cats.forEach(cat => {
-      const catItems = brandItems.filter(p => p.cat === cat);
-      if(!catItems.length) return;
-      const cm = CAT_META[cat];
-      html += `<div class="cat-label">${cm.emoji} ${cm.label}</div>`;
-      catItems.forEach(p => {
-        const oosHtml = p.oos ? '<span class="oos-badge">Out of Stock</span>' : `<button class="pharma-add-btn" onclick="event.stopPropagation();addPharmaToCart('${p.id}')">+</button>`;
-        html += `
-          <div class="pharma-item${p.oos?' out-of-stock':''}" onclick="${p.oos?'':'addPharmaToCart(\''+p.id+'\')'}" >
-            <div class="pharma-item-emoji">${p.emoji}</div>
-            <div class="pharma-item-info">
-              <div class="pharma-item-name">${p.name}</div>
-              <div class="pharma-item-brand">${BRAND_META[p.brand].label}</div>
-            </div>
-            <div class="pharma-item-right">
-              <div class="pharma-price">€${p.price}</div>
-              ${oosHtml}
-            </div>
-          </div>`;
-      });
-    });
-    html += `</div></div>`;
-  });
-
-  container.innerHTML = html;
-}
-
-function addPharmaToCart(id){
-  const p = PHARMA_PRODUCTS.find(x => x.id === id);
-  if(!p || p.oos) return;
-  // Reuse cart system — prefix pharma IDs to avoid collision
-  const cartId = 'pharma_' + p.id;
-  const e = cart.find(x => x.id === cartId);
-  if(e) e.qty += 1;
-  else cart.push({id: cartId, qty: 1, pharmaRef: id});
-  saveCart(); updateCartUI(); showToast('✅ ' + p.name + ' aggiunto!');
-}
 
 function renderCartPanel(){
   const list = document.getElementById('cart-items-list');
@@ -1510,11 +1447,7 @@ if(!PHARMA_LOCAL) {
   PHARMA_LOCAL = JSON.parse(JSON.stringify(PHARMA_PRODUCTS));
   localStorage.setItem('tp_pharma', JSON.stringify(PHARMA_LOCAL));
 }
-// Override PHARMA_PRODUCTS reference used in render with a live getter
-function getPharmaProducts(){ return PHARMA_LOCAL; }
-
-// Patch renderPharma and addPharmaToCart to use PHARMA_LOCAL
-const _origRenderPharma = renderPharma;
+// renderPharma defined in pharma admin section below
 function renderPharma(){
   const container = document.getElementById('pharma-content');
   if(!container) return;
