@@ -861,6 +861,8 @@ async function loadProductsFromFirebase() {
         seedDefaultProducts();
       } else {
         PRODUCTS = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+        // Sync any new DEFAULT_PRODUCTS not yet in Firebase
+        syncMissingProducts(snapshot);
         // Ordina per campo order se disponibile, altrimenti per nome
         PRODUCTS.sort((a,b) => (a.order ?? 99) - (b.order ?? 99));
         renderProducts();
@@ -884,6 +886,17 @@ async function seedDefaultProducts() {
     const p = { ...DEFAULT_PRODUCTS[i], order: i };
     await setDoc(doc(db, 'products', String(p.id)), p);
   }
+}
+
+async function syncMissingProducts(snapshot) {
+  const existingIds = new Set(snapshot.docs.map(d => String(d.id)));
+  const missing = DEFAULT_PRODUCTS.filter(p => !existingIds.has(String(p.id)));
+  if (!missing.length) return;
+  for (let i = 0; i < missing.length; i++) {
+    const p = { ...missing[i], order: 100 + i };
+    await setDoc(doc(db, 'products', String(p.id)), p);
+  }
+  console.log(`Synced ${missing.length} new products to Firebase`);
 }
 
 async function saveProductToFirebase(prod) {
