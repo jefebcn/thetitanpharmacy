@@ -476,9 +476,6 @@
 </style>
 </head>
 <body>
-    <div class="hero-tap">tap to enter</div>
-  </div>
-</div>
 <div id="app">
   <!-- HEADER -->
   <div class="led-line"></div>
@@ -528,9 +525,13 @@
 
     <div class="nav-tabs" id="filter-tabs">
       <button class="nav-tab active" onclick="setFilter(this,'all')">🔥 All</button>
-      <button class="nav-tab" onclick="setFilter(this,'premium')">💎 Premium</button>
+      <button class="nav-tab" onclick="setFilter(this,'drysift')">🇲🇦 Dry Sift</button>
+      <button class="nav-tab" onclick="setFilter(this,'plasma')">🔝 Plasma</button>
       <button class="nav-tab" onclick="setFilter(this,'frozen')">🧊 Frozen</button>
-      <button class="nav-tab" onclick="setFilter(this,'new')">✨ New</button>
+      <button class="nav-tab" onclick="setFilter(this,'cali')">🇺🇸 Cali USA</button>
+      <button class="nav-tab" onclick="setFilter(this,'spain')">🇪🇸 Spain</button>
+      <button class="nav-tab" onclick="setFilter(this,'vape')">💨 Vape</button>
+      <button class="nav-tab" onclick="setFilter(this,'premium')">💎 Premium</button>
       <button class="nav-tab" onclick="setFilter(this,'hash')">🪨 Hash</button>
       <button class="nav-tab" onclick="setFilter(this,'cbd')">🌿 CBD</button>
     </div>
@@ -743,6 +744,7 @@ const db = getFirestore(firebaseApp);
 
 // ===== DEFAULT PRODUCTS =====
 const DEFAULT_PRODUCTS = [
+  // ── EXISTING ──────────────────────────────────────────────────────────
   {id:1,name:'DRYWORK',emoji:'🌿',badge:'premium',category:'premium',origin:'Italy',
    desc:'Classic Italian, the jewel of our catalog. Superior quality, intense and persistent aroma. Relaxing sweet effect.',
    tags:['Indoor','Sativa','THC 22%','Floral'],price:90,unit:'10g',priceG:9,photo:''},
@@ -761,6 +763,77 @@ const DEFAULT_PRODUCTS = [
   {id:6,name:'AMNESIA',emoji:'🔥',badge:'new',category:'premium',origin:'Amsterdam',
    desc:'The iconic Amnesia Haze from Amsterdam. Citrus and spicy aroma, cerebral and creative effect. Legendary.',
    tags:['Indoor','Sativa','THC 21%','Citrus'],price:100,unit:'10g',priceG:10,photo:''},
+
+  // ── 🇲🇦 TOP DRY SIFT FILTERED — Format 100g ───────────────────────────
+  {id:10,name:'GELATO — Dry Sift',emoji:'🍨',badge:'drysift',category:'drysift',origin:'Morocco',
+   desc:'Top Dry Sift Filtered. Gelato strain — sweet and creamy profile, dense resin extraction. Format 100g.',
+   tags:['Dry Sift','Morocco','100g','Filtered'],price:0,unit:'100g',priceG:0,photo:''},
+  {id:11,name:'MOROCCO KO — Dry Sift',emoji:'🌙',badge:'drysift',category:'drysift',origin:'Morocco',
+   desc:'Top Dry Sift Filtered. Morocco KO — powerful Moroccan expression, earthy and spiced notes. Format 100g.',
+   tags:['Dry Sift','Morocco','100g','Filtered'],price:0,unit:'100g',priceG:0,photo:''},
+  {id:12,name:'GUAVA CREAM — Dry Sift',emoji:'🥑',badge:'drysift',category:'drysift',origin:'Morocco',
+   desc:'Top Dry Sift Filtered. Guava Cream — tropical and creamy terpene profile, smooth extraction. Format 100g.',
+   tags:['Dry Sift','Morocco','100g','Filtered'],price:0,unit:'100g',priceG:0,photo:''},
+
+  // ── 🔝 PLASMA STATIC — Format 100/50g ────────────────────────────────
+  {id:20,name:'WHITE RUNTZ — Plasma',emoji:'🥥',badge:'plasma',category:'plasma',origin:'Italy',
+   desc:'Plasma Static. White Runtz — candy-like sweetness, ultra-dense trichome coating. Format 100/50g.',
+   tags:['Plasma Static','100g','50g','Top Shelf'],price:0,unit:'100g',priceG:0,photo:''},
+  {id:21,name:'PINEAPPLE JUICE — Plasma',emoji:'🍹',badge:'plasma',category:'plasma',origin:'Italy',
+   desc:'Plasma Static. Pineapple Juice — bright tropical notes, electric terpene expression. Format 100/50g.',
+   tags:['Plasma Static','100g','50g','Tropical'],price:0,unit:'100g',priceG:0,photo:''},
+  {id:22,name:'RS11 — Plasma',emoji:'🏎️',badge:'plasma',category:'plasma',origin:'Italy',
+   desc:'Plasma Static. RS11 — legendary genetics, complex layered aroma, premium resin. Format 100/50g.',
+   tags:['Plasma Static','100g','50g','Legendary'],price:0,unit:'100g',priceG:0,photo:''},
+  {id:23,name:'PAPAYA — Plasma',emoji:'🍑',badge:'plasma',category:'plasma',origin:'Italy',
+   desc:'Plasma Static. Papaya — exotic fruity terpenes, rich resin content. Format 100/50g.',
+   tags:['Plasma Static','100g','50g','Fruity'],price:0,unit:'100g',priceG:0,photo:''},
+  {id:24,name:'GRAPE GLUE — Plasma',emoji:'🍒',badge:'plasma',category:'plasma',origin:'Italy',
+   desc:'Plasma Static. Grape Glue — deep grape and diesel fusion, sticky and potent. Format 100/50g.',
+   tags:['Plasma Static','100g','50g','Grape'],price:0,unit:'100g',priceG:0,photo:''},
+
+  // ── 🎖️ PREMIUM FROZEN — Format 100g ──────────────────────────────────
+  {id:30,name:'RAINBOW BELTS — Frozen',emoji:'🦄',badge:'frozen',category:'frozen',origin:'Italy',
+   desc:'Premium Frozen. Rainbow Belts — vibrant multi-terpene profile, ice-cured for maximum freshness. Format 100g.',
+   tags:['Frozen','Premium','100g','Rainbow'],price:0,unit:'100g',priceG:0,photo:''},
+
+  // ── 🎖️ PREMIUM CALI USA ───────────────────────────────────────────────
+  {id:40,name:'11:11',emoji:'🔥',badge:'premium',category:'cali',origin:'USA',
+   desc:'Premium Cali USA. 11:11 — rare American genetics, powerful and complex. Import directo USA.',
+   tags:['Cali USA','Premium','Import','Exotic'],price:0,unit:'TBD',priceG:0,photo:''},
+  {id:41,name:'WHITE RAINBOW',emoji:'🔥',badge:'premium',category:'cali',origin:'USA',
+   desc:'Premium Cali USA. White Rainbow — vivid terpene spectrum, top-shelf American strain.',
+   tags:['Cali USA','Premium','Import','Exotic'],price:0,unit:'TBD',priceG:0,photo:''},
+  {id:42,name:'SUBZERO CHERRY BOMB',emoji:'🔥',badge:'frozen',category:'cali',origin:'USA',
+   desc:'Premium Cali USA. Subzero Cherry Bomb — icy and explosive cherry profile, USA exclusive.',
+   tags:['Cali USA','Frozen','Import','Cherry'],price:0,unit:'TBD',priceG:0,photo:''},
+  {id:43,name:'NINE LIONS',emoji:'🔥',badge:'premium',category:'cali',origin:'USA',
+   desc:'Premium Cali USA. Nine Lions — powerful USA strain, bold and long-lasting.',
+   tags:['Cali USA','Premium','Import','Exotic'],price:0,unit:'TBD',priceG:0,photo:''},
+
+  // ── 🇺🇸 PREMIUM CALI BAGS USA ────────────────────────────────────────
+  {id:50,name:'CALI BAGS USA',emoji:'💼',badge:'premium',category:'cali',origin:'USA',
+   desc:'Premium Cali Bags USA. Bags 3.5g + 0.7g Pre-Roll. 5+ strain selection — authentic US packaging.',
+   tags:['Cali USA','3.5g','Pre-Roll','Bags'],price:0,unit:'3.5g + pre-roll',priceG:0,photo:''},
+
+  // ── 🇪🇸 CALI SPAIN TOP SHELF ─────────────────────────────────────────
+  {id:60,name:'PEACH POP',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
+   desc:'Cali Spain Top Shelf. Peach Pop — sun-grown Spanish excellence, peachy and sweet terpene burst.',
+   tags:['Cali Spain','Top Shelf','Peach','Indoor'],price:0,unit:'TBD',priceG:0,photo:''},
+  {id:61,name:'GRAPE BOMB',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
+   desc:'Cali Spain Top Shelf. Grape Bomb — explosive grape aroma, dense and resinous Spanish genetics.',
+   tags:['Cali Spain','Top Shelf','Grape','Indoor'],price:0,unit:'TBD',priceG:0,photo:''},
+  {id:62,name:'LEMON ZK',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
+   desc:'Cali Spain Top Shelf. Lemon ZK — citrus-forward Zkittlez cross, bright and zesty.',
+   tags:['Cali Spain','Top Shelf','Lemon','Zkittlez'],price:0,unit:'TBD',priceG:0,photo:''},
+  {id:63,name:'RS INFERNO',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
+   desc:'Cali Spain Top Shelf. RS Inferno — fiery RS genetics from Spain, intense and long-lasting.',
+   tags:['Cali Spain','Top Shelf','RS','Inferno'],price:0,unit:'TBD',priceG:0,photo:''},
+
+  // ── 💨 PREMIUM VAPE USA ───────────────────────────────────────────────
+  {id:70,name:'LIVE RESIN VAPE BOX USA',emoji:'💨',badge:'new',category:'vape',origin:'USA',
+   desc:'Premium Vape USA. Box: 1 Live Resin Vape 2pz (1g/1g) + Pre-Roll 0.7g. 6+ strain selection.',
+   tags:['Vape','Live Resin','USA','Pre-Roll'],price:0,unit:'2x 1g + pre-roll',priceG:0,photo:''},
 ];
 
 // ===== STATE =====
