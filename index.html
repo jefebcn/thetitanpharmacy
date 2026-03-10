@@ -36,7 +36,7 @@
     --moss:     #4a7c59;
     --red:      #e83b3b;
     --blue:     #7c9cf5;
-    --radius:   16px;
+    --radius:   12px;
 
     --glow-gold: 0 0 10px rgba(232,184,75,.5), 0 0 24px rgba(232,184,75,.2);
     --glow-gold-sm: 0 0 6px rgba(232,184,75,.35);
@@ -59,61 +59,120 @@
   /* ===== APP SHELL ===== */
   #app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto;position:relative;z-index:1;}
 
-  /* ===== LED line (now gold) ===== */
+  /* ===== LED line ===== */
   .led-line{
     height:2px;
     background:linear-gradient(90deg,transparent,var(--gold),rgba(196,124,62,.7),var(--gold),transparent);
     box-shadow:0 0 10px rgba(232,184,75,.5);
   }
 
-  /* Header */
+  /* ===================================================================
+     AMAZON-STYLE HEADER (3 zones: logo | search | account+cart)
+  =================================================================== */
   .header{
-    background:rgba(20,16,48,.96);backdrop-filter:blur(14px);
-    border-bottom:1px solid rgba(232,184,75,.18);
-    padding:12px 16px;position:sticky;top:0;z-index:100;
-    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(14,11,30,.98);backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(232,184,75,.2);
+    padding:10px 12px;position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;gap:8px;
     box-shadow:0 2px 20px rgba(0,0,0,.6), 0 1px 0 rgba(232,184,75,.1);
   }
+  /* Logo block */
   .header-logo{
-    font-family:'Permanent Marker',cursive;font-size:1.3rem;
-    line-height:1;display:flex;flex-direction:column;letter-spacing:.5px;
+    flex-shrink:0;display:flex;flex-direction:column;
+    border:1px solid rgba(232,184,75,.22);border-radius:8px;
+    padding:4px 8px;background:rgba(232,184,75,.05);
+    cursor:pointer;transition:.2s;
   }
+  .header-logo:hover{border-color:var(--gold);}
   .header-logo .the-word{
-    font-family:'Fredoka One',cursive;font-size:.65rem;color:var(--gold);
-    letter-spacing:2px;text-transform:uppercase;text-shadow:var(--glow-gold-sm);margin-bottom:1px;
+    font-family:'Fredoka One',cursive;font-size:.52rem;color:var(--gold);
+    letter-spacing:2px;text-transform:uppercase;text-shadow:var(--glow-gold-sm);line-height:1;
   }
   .header-logo .titan-word{
-    color:#fff;
+    font-family:'Permanent Marker',cursive;font-size:1rem;color:#fff;line-height:1.1;
     text-shadow:0 0 14px rgba(232,184,75,.7), 0 0 32px rgba(232,184,75,.25);
-    -webkit-text-stroke:.5px rgba(232,184,75,.5);
   }
   .header-logo .pharm-word{
-    color:var(--gold);text-shadow:var(--glow-gold-sm);font-size:1rem;
+    font-family:'Fredoka One',cursive;font-size:.72rem;color:var(--gold);
+    text-shadow:var(--glow-gold-sm);line-height:1;
   }
-  .header-right{display:flex;align-items:center;gap:10px;}
-  .online-dot{
-    display:inline-block;width:7px;height:7px;background:var(--gold);
-    border-radius:50%;margin-right:4px;animation:pulse 2s infinite;
-    box-shadow:var(--glow-gold-sm);
+  /* Search bar — main center element */
+  .header-search{
+    flex:1;display:flex;align-items:center;height:40px;
+    border:2px solid var(--gold);border-radius:8px;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(232,184,75,.1);
   }
-  @keyframes pulse{0%,100%{opacity:1;box-shadow:var(--glow-gold-sm)}50%{opacity:.35;box-shadow:none}}
+  .header-search input{
+    flex:1;background:var(--bg3);border:none;outline:none;
+    padding:0 12px;color:var(--text);font-size:.88rem;font-family:inherit;height:100%;
+  }
+  .header-search input::placeholder{color:var(--muted);}
+  .header-search-btn{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    border:none;width:40px;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:1rem;flex-shrink:0;
+    transition:.2s;
+  }
+  .header-search-btn:hover{background:var(--gold-light);}
+  /* Account + Cart area */
+  .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .hdr-account-btn{
+    display:flex;flex-direction:column;align-items:center;
+    cursor:pointer;padding:3px 6px;border-radius:6px;
+    border:1px solid transparent;transition:.2s;min-width:48px;
+  }
+  .hdr-account-btn:hover{border-color:var(--gold);background:rgba(232,184,75,.06);}
+  .hdr-account-btn span:first-child{font-size:1.1rem;line-height:1;}
+  .hdr-account-btn .hdr-lbl{font-size:.58rem;color:var(--muted);margin-top:1px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
+  /* Cart button — Amazon style with count badge */
   .cart-btn{
-    background:rgba(232,184,75,.07);border:1px solid rgba(232,184,75,.28);border-radius:10px;
-    padding:8px 14px;display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--text);
-    font-size:.85rem;font-family:inherit;transition:.2s;position:relative;box-shadow:var(--glow-border);
+    position:relative;
+    background:rgba(232,184,75,.07);border:1px solid rgba(232,184,75,.28);border-radius:8px;
+    padding:5px 10px;display:flex;flex-direction:column;align-items:center;
+    cursor:pointer;color:var(--text);font-size:.58rem;font-weight:600;
+    transition:.2s;box-shadow:var(--glow-border);
+    text-transform:uppercase;letter-spacing:.3px;min-width:48px;
   }
   .cart-btn:hover{border-color:var(--gold);box-shadow:var(--glow-gold);background:rgba(232,184,75,.13);}
+  .cart-btn-icon{font-size:1.1rem;line-height:1;position:relative;}
   .cart-count{
-    position:absolute;top:-6px;right:-6px;background:var(--bronze);color:#fff;
-    border-radius:50%;width:18px;height:18px;font-size:.65rem;font-weight:700;
+    position:absolute;top:-4px;right:-4px;background:var(--gold);color:#0e0b1e;
+    border-radius:50%;width:16px;height:16px;font-size:.58rem;font-weight:800;
     display:none;align-items:center;justify-content:center;
-    box-shadow:0 0 8px rgba(196,124,62,.6);
+    box-shadow:0 0 8px rgba(232,184,75,.6);
   }
+  .cart-btn-lbl{font-size:.58rem;color:var(--muted);margin-top:1px;}
 
-  /* Banner */
+  /* ===================================================================
+     AMAZON-STYLE SUB-NAV (category tabs horizontal strip)
+  =================================================================== */
+  .sub-nav{
+    background:rgba(20,16,48,.96);backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(232,184,75,.1);
+    display:flex;gap:0;overflow-x:auto;scrollbar-width:none;
+    padding:0 4px;
+    position:sticky;top:67px;z-index:90;
+  }
+  .sub-nav::-webkit-scrollbar{display:none;}
+  .sub-nav-item{
+    padding:9px 12px;font-size:.78rem;font-weight:600;cursor:pointer;
+    color:var(--muted);white-space:nowrap;transition:.2s;font-family:inherit;
+    border-bottom:2px solid transparent;border-top:2px solid transparent;
+    background:none;border-left:none;border-right:none;
+  }
+  .sub-nav-item.active{
+    color:var(--gold);border-bottom-color:var(--gold);
+    text-shadow:var(--glow-gold-sm);
+  }
+  .sub-nav-item:hover:not(.active){color:var(--text);border-bottom-color:rgba(232,184,75,.4);}
+
+  /* ===================================================================
+     BANNER + MARQUEE
+  =================================================================== */
   .banner{
-    margin:16px 16px 8px;border-radius:var(--radius);padding:14px 18px;
-    display:flex;align-items:center;gap:12px;font-weight:700;font-size:.88rem;
+    margin:12px 12px 6px;border-radius:var(--radius);padding:12px 16px;
+    display:flex;align-items:center;gap:10px;font-weight:700;font-size:.85rem;
   }
   .banner-ship{
     background:linear-gradient(135deg,#1a1540,#221c55);
@@ -132,88 +191,120 @@
     border:1px solid rgba(196,124,62,.35);color:var(--bronze);
     box-shadow:0 0 20px rgba(196,124,62,.07), inset 0 1px 0 rgba(196,124,62,.12);
   }
-  .banner-sub{font-size:.72rem;font-weight:400;opacity:.85;margin-top:2px;}
-  .banner-icon{font-size:1.6rem;flex-shrink:0;}
+  .banner-sub{font-size:.7rem;font-weight:400;opacity:.85;margin-top:2px;}
+  .banner-icon{font-size:1.5rem;flex-shrink:0;}
 
-  /* Marquee */
   .marquee-wrap{
     overflow:hidden;background:var(--bg3);
-    border-top:1px solid rgba(232,184,75,.1);border-bottom:1px solid rgba(232,184,75,.1);padding:7px 0;
+    border-top:1px solid rgba(232,184,75,.1);border-bottom:1px solid rgba(232,184,75,.1);padding:6px 0;
   }
   .marquee{display:flex;gap:40px;animation:marquee 20s linear infinite;white-space:nowrap;}
-  .marquee span{font-size:.72rem;color:var(--muted);letter-spacing:.3px;}
+  .marquee span{font-size:.7rem;color:var(--muted);letter-spacing:.3px;}
   .marquee span b{color:var(--gold);text-shadow:var(--glow-gold-sm);}
   @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-  /* Filter tabs */
-  .nav-tabs{display:flex;gap:8px;padding:12px 16px 8px;overflow-x:auto;scrollbar-width:none;}
-  .nav-tabs::-webkit-scrollbar{display:none;}
-  .nav-tab{
-    background:var(--bg3);border:1px solid var(--border);border-radius:30px;
-    padding:7px 14px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--muted);
-    white-space:nowrap;transition:.2s;font-family:inherit;
+  /* ===================================================================
+     SECTION HEADER (Amazon "Results for…" style)
+  =================================================================== */
+  .results-bar{
+    padding:8px 12px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.04);
   }
-  .nav-tab.active{
-    background:linear-gradient(135deg,var(--gold),var(--gold2));
-    color:#0e0b1e;border-color:var(--gold);box-shadow:var(--glow-gold);
+  .results-count{
+    font-size:.78rem;color:var(--muted);
   }
-  .nav-tab:hover:not(.active){border-color:var(--gold);color:var(--text);}
-
-  /* Search */
-  .search-bar{margin:0 16px 10px;position:relative;}
-  .search-bar input{
-    width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:12px;
-    padding:11px 16px 11px 40px;color:var(--text);font-size:.88rem;font-family:inherit;outline:none;
-    transition:border-color .2s, box-shadow .2s;
-  }
-  .search-bar input:focus{border-color:rgba(232,184,75,.5);box-shadow:0 0 0 3px rgba(232,184,75,.08);}
-  .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.95rem;}
-
-  /* Section title */
-  .section-title{
-    padding:8px 16px 6px;font-family:'Fredoka One',cursive;font-size:.82rem;font-weight:400;
-    color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;text-shadow:var(--glow-gold-sm);
+  .results-count strong{color:var(--text);}
+  .results-sort{
+    font-size:.72rem;color:var(--gold);font-weight:600;cursor:pointer;
+    text-shadow:var(--glow-gold-sm);
   }
 
-  /* Products grid */
-  .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 110px;}
+  /* ===================================================================
+     AMAZON-STYLE PRODUCT GRID CARDS
+  =================================================================== */
+  .products-grid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:1px;padding:0 0 110px;
+    background:rgba(255,255,255,.03);
+  }
   .product-card{
-    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-    overflow:hidden;cursor:pointer;transition:border-color .25s,transform .2s,box-shadow .25s;
+    background:var(--card);
+    overflow:hidden;cursor:pointer;
+    transition:background .2s;
+    position:relative;
+    display:flex;flex-direction:column;
   }
-  .product-card:hover{
-    border-color:rgba(232,184,75,.5);transform:translateY(-3px);
-    box-shadow:0 8px 28px rgba(0,0,0,.6), 0 0 18px rgba(232,184,75,.12);
-  }
+  .product-card:hover{background:#1e1a48;}
+
+  /* Image / emoji area */
   .product-img{
-    aspect-ratio:1;background:var(--bg3);display:flex;align-items:center;justify-content:center;
+    aspect-ratio:1;background:var(--bg3);
+    display:flex;align-items:center;justify-content:center;
     font-size:3.5rem;position:relative;overflow:hidden;
+    border-bottom:1px solid var(--border);
   }
   .product-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
   .product-img .emoji-fallback{font-size:3.5rem;z-index:1;}
+
+  /* Amazon badge "Titan Prime" */
   .product-badge{
-    position:absolute;top:8px;left:8px;z-index:2;border-radius:6px;
-    padding:2px 8px;font-size:.62rem;font-weight:700;
+    position:absolute;top:0;left:0;z-index:2;
+    padding:3px 7px;font-size:.6rem;font-weight:800;letter-spacing:.3px;
+    background:linear-gradient(135deg,var(--gold),var(--bronze));
+    color:#0e0b1e;
   }
-  .product-badge.premium{background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#fff;box-shadow:0 0 8px rgba(124,58,237,.5);}
-  .product-badge.frozen{background:linear-gradient(135deg,#60a5fa,#2563eb);color:#fff;box-shadow:0 0 8px rgba(37,99,235,.5);}
-  .product-badge.new{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0e0b1e;box-shadow:var(--glow-gold-sm);}
-  .product-badge.hash{background:linear-gradient(135deg,var(--bronze),var(--bronze2));color:#fff;box-shadow:0 0 8px rgba(196,124,62,.5);}
-  .product-badge.cbd{background:linear-gradient(135deg,#4a7c59,#2d5a3d);color:#fff;box-shadow:0 0 8px rgba(74,124,89,.5);}
-  .product-info{padding:11px;}
-  .product-name{font-family:'Fredoka One',cursive;font-weight:400;font-size:.92rem;margin-bottom:3px;letter-spacing:.3px;}
-  .product-desc{font-size:.7rem;color:var(--muted);line-height:1.4;margin-bottom:9px;}
-  .product-footer{display:flex;align-items:center;justify-content:space-between;}
-  .product-price{color:var(--gold);font-weight:700;font-size:.9rem;text-shadow:var(--glow-gold-sm);}
-  .product-price span{color:var(--muted);font-size:.68rem;font-weight:400;text-shadow:none;}
+  .product-badge.premium,
+  .product-badge.frozen,
+  .product-badge.new,
+  .product-badge.hash,
+  .product-badge.cbd,
+  .product-badge.drysift,
+  .product-badge.plasma{
+    background:linear-gradient(135deg,var(--gold),var(--bronze));
+    color:#0e0b1e;
+  }
+
+  /* Info area */
+  .product-info{padding:10px 10px 12px;flex:1;display:flex;flex-direction:column;gap:4px;}
+  .product-name{
+    font-size:.84rem;font-weight:700;color:var(--text);
+    line-height:1.3;letter-spacing:.2px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+
+  /* Stars row */
+  .product-stars{display:flex;align-items:center;gap:4px;margin-top:1px;}
+  .stars-icons{color:var(--gold);font-size:.7rem;text-shadow:var(--glow-gold-sm);}
+  .stars-count{font-size:.68rem;color:var(--blue);text-decoration:none;}
+
+  /* Titan Prime badge inline */
+  .prime-badge{
+    display:inline-flex;align-items:center;gap:3px;
+    background:linear-gradient(135deg,var(--gold),var(--bronze));
+    color:#0e0b1e;border-radius:3px;padding:1px 5px;
+    font-size:.58rem;font-weight:800;letter-spacing:.2px;margin-top:1px;width:fit-content;
+  }
+
+  /* Amazon-style price */
+  .product-price-block{margin-top:auto;padding-top:6px;}
+  .price-top{display:flex;align-items:flex-start;gap:1px;}
+  .price-currency{font-size:.7rem;color:var(--gold);font-weight:700;margin-top:2px;text-shadow:var(--glow-gold-sm);}
+  .price-int{font-size:1.3rem;color:var(--gold);font-weight:800;line-height:1;text-shadow:var(--glow-gold-sm);}
+  .price-dec{font-size:.7rem;color:var(--gold);font-weight:700;margin-top:2px;}
+  .price-unit{font-size:.65rem;color:var(--muted);margin-top:2px;}
+  .price-contact{font-size:.75rem;color:var(--bronze);font-weight:600;margin-top:4px;}
+
+  /* Add to cart button (Amazon orange-style → gold) */
   .add-btn{
     background:linear-gradient(135deg,var(--gold),var(--gold2));
-    border:none;border-radius:50%;width:28px;height:28px;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;
-    font-size:1.1rem;color:#0e0b1e;font-weight:700;transition:.2s;flex-shrink:0;
-    box-shadow:var(--glow-gold-sm);
+    border:none;border-radius:6px;
+    width:100%;padding:7px 0;margin-top:8px;
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    cursor:pointer;font-size:.75rem;font-weight:700;color:#0e0b1e;
+    font-family:'Fredoka One',cursive;letter-spacing:.3px;
+    transition:.2s;box-shadow:var(--glow-gold-sm);
   }
-  .add-btn:hover{background:var(--gold-light);transform:scale(1.15);}
+  .add-btn:hover{background:var(--gold-light);transform:scale(.98);}
 
   /* Bottom nav */
   .bottom-nav{
@@ -242,7 +333,7 @@
     position:absolute;bottom:0;left:50%;transform:translateX(-50%);
     width:100%;max-width:480px;background:var(--bg2);
     border-radius:var(--radius) var(--radius) 0 0;padding:20px 20px 32px;
-    max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px;
+    max-height:92vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px;
     animation:slideUp .3s ease;
     border-top:1px solid rgba(232,184,75,.2);
     box-shadow:0 -8px 40px rgba(0,0,0,.7), 0 0 60px rgba(232,184,75,.04);
@@ -251,83 +342,256 @@
   .panel-handle{width:36px;height:4px;background:rgba(232,184,75,.35);border-radius:2px;margin:0 auto -6px;box-shadow:var(--glow-gold-sm);}
   .panel-title{font-family:'Fredoka One',cursive;font-size:1.3rem;font-weight:400;letter-spacing:.5px;}
 
-  /* Cart */
-  .cart-item{display:flex;align-items:center;gap:12px;background:var(--bg3);border-radius:12px;padding:11px;}
+  /* ===================================================================
+     AMAZON-STYLE CART PANEL
+  =================================================================== */
+  /* Summary box at top (Amazon "Proceed to checkout" box) */
+  .cart-summary-box{
+    background:var(--bg3);border:1px solid rgba(232,184,75,.2);border-radius:var(--radius);
+    padding:14px 16px;display:flex;flex-direction:column;gap:8px;
+  }
+  .cart-summary-title{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+  .cart-summary-total{
+    display:flex;align-items:baseline;gap:4px;
+  }
+  .cart-summary-total-label{font-size:.88rem;color:var(--text);font-weight:500;}
+  .cart-summary-total-amount{
+    font-family:'Fredoka One',cursive;font-size:1.6rem;font-weight:400;
+    color:var(--gold);text-shadow:var(--glow-gold-sm);margin-left:auto;
+  }
+  .cart-summary-sub{font-size:.7rem;color:var(--muted);}
+  .cart-summary-sub strong{color:var(--moss);}
+  .cart-checkout-main{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#0e0b1e;border:none;border-radius:8px;padding:13px;
+    font-weight:700;font-size:.9rem;font-family:'Fredoka One',cursive;
+    cursor:pointer;transition:.2s;width:100%;letter-spacing:.5px;
+    box-shadow:var(--glow-gold);
+  }
+  .cart-checkout-main:hover{opacity:.92;}
+  .cart-checkout-main:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;box-shadow:none;}
+
+  /* Cart items list — Amazon row style */
+  .cart-items-label{
+    font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;
+    padding:4px 0 2px;border-bottom:1px solid var(--border);
+  }
+  .cart-item{
+    background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px;display:flex;gap:12px;
+  }
   .cart-item-thumb{
-    width:44px;height:44px;border-radius:8px;background:var(--bg);
-    display:flex;align-items:center;justify-content:center;font-size:1.6rem;overflow:hidden;flex-shrink:0;
+    width:56px;height:56px;border-radius:8px;background:var(--bg);
+    display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;
+    border:1px solid var(--border);
   }
   .cart-item-thumb img{width:100%;height:100%;object-fit:cover;}
-  .cart-item-info{flex:1;min-width:0;}
-  .cart-item-name{font-weight:700;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .cart-item-price{color:var(--gold);font-size:.78rem;font-weight:600;}
-  .cart-qty{display:flex;align-items:center;gap:7px;}
-  .qty-btn{background:var(--border);border:none;border-radius:6px;width:26px;height:26px;color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;}
-  .qty-btn:hover{background:var(--gold);color:#0e0b1e;}
-  .qty-num{font-size:.9rem;font-weight:700;min-width:18px;text-align:center;}
-  .cart-total{background:var(--bg3);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center;}
-  .total-label{color:var(--muted);font-size:.82rem;}
-  .total-amount{font-family:'Fredoka One',cursive;font-size:1.5rem;font-weight:400;color:var(--gold);text-shadow:var(--glow-gold-sm);}
+  .cart-item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+  .cart-item-name{font-weight:700;font-size:.84rem;line-height:1.3;}
+  .cart-item-avail{font-size:.7rem;color:var(--moss);font-weight:600;}
+  .cart-item-price{color:var(--gold);font-size:.82rem;font-weight:700;text-shadow:var(--glow-gold-sm);}
+  .cart-item-actions{display:flex;align-items:center;gap:6px;margin-top:4px;}
+  .qty-btn{
+    background:var(--bg);border:1px solid var(--border);border-radius:6px;
+    width:28px;height:28px;color:var(--text);font-size:1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:.2s;
+  }
+  .qty-btn:hover{background:var(--gold);color:#0e0b1e;border-color:var(--gold);}
+  .qty-num{font-size:.88rem;font-weight:700;min-width:20px;text-align:center;}
+  .cart-remove-btn{
+    margin-left:4px;background:none;border:none;
+    font-size:.7rem;color:var(--muted);cursor:pointer;text-decoration:underline;
+    font-family:inherit;transition:.2s;padding:0;
+  }
+  .cart-remove-btn:hover{color:var(--red);}
   .empty-cart{text-align:center;color:var(--muted);padding:32px;font-size:.88rem;}
   .empty-cart div{font-size:3rem;margin-bottom:8px;}
 
-  /* Product detail */
-  .detail-img{font-size:6rem;text-align:center;background:var(--bg3);border-radius:12px;padding:24px;min-height:160px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+  /* ===================================================================
+     AMAZON-STYLE PRODUCT DETAIL (Buy Box)
+  =================================================================== */
+  .detail-img{
+    font-size:6rem;text-align:center;background:var(--bg3);border-radius:12px;
+    padding:24px;min-height:180px;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;position:relative;border:1px solid var(--border);
+  }
   .detail-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;}
   .detail-img .de{position:relative;z-index:1;font-size:5rem;}
-  .detail-name{font-family:'Fredoka One',cursive;font-size:1.5rem;font-weight:400;letter-spacing:.3px;}
-  .detail-origin{color:var(--muted);font-size:.82rem;margin-top:3px;}
-  .detail-desc{color:#c8bfdf;font-size:.88rem;line-height:1.6;}
-  .detail-tags{display:flex;gap:7px;flex-wrap:wrap;}
-  .tag{background:var(--bg3);border:1px solid rgba(232,184,75,.15);border-radius:20px;padding:4px 11px;font-size:.72rem;color:var(--muted);}
-  .detail-price-row{display:flex;align-items:center;justify-content:space-between;}
-  .detail-price{font-family:'Fredoka One',cursive;font-size:2rem;font-weight:400;color:var(--gold);text-shadow:var(--glow-gold);}
-  .detail-unit{color:var(--muted);font-size:.78rem;}
-  .qty-selector{display:flex;align-items:center;gap:11px;background:var(--bg3);border-radius:12px;padding:8px 14px;}
-  .qty-selector button{background:none;border:none;color:var(--text);font-size:1.2rem;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:.2s;}
+  .detail-badge-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .detail-prime{
+    display:inline-flex;align-items:center;gap:3px;
+    background:linear-gradient(135deg,var(--gold),var(--bronze));
+    color:#0e0b1e;border-radius:4px;padding:3px 8px;
+    font-size:.68rem;font-weight:800;letter-spacing:.3px;
+  }
+  .detail-name{font-family:'Fredoka One',cursive;font-size:1.35rem;font-weight:400;letter-spacing:.3px;line-height:1.3;}
+  .detail-origin{color:var(--muted);font-size:.8rem;margin-top:2px;}
+  .detail-stars{display:flex;align-items:center;gap:6px;}
+  .detail-stars .stars-icons{font-size:.85rem;color:var(--gold);}
+  .detail-stars .stars-lbl{font-size:.75rem;color:var(--blue);text-decoration:none;}
+  /* Amazon bullet-point description */
+  .detail-bullets{display:flex;flex-direction:column;gap:4px;padding-left:4px;}
+  .detail-bullet{
+    display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:#c8bfdf;line-height:1.5;
+  }
+  .detail-bullet::before{
+    content:'▸';color:var(--gold);flex-shrink:0;margin-top:1px;font-size:.75rem;
+  }
+  /* Tags */
+  .detail-tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{background:var(--bg3);border:1px solid rgba(232,184,75,.15);border-radius:20px;padding:3px 10px;font-size:.7rem;color:var(--muted);}
+
+  /* BUY BOX (Amazon right panel) */
+  .buy-box{
+    background:var(--bg3);border:1px solid rgba(232,184,75,.25);border-radius:var(--radius);
+    padding:16px;display:flex;flex-direction:column;gap:10px;
+    box-shadow:0 0 20px rgba(232,184,75,.07), inset 0 1px 0 rgba(232,184,75,.06);
+  }
+  .buy-box-price-row{display:flex;align-items:flex-start;gap:2px;}
+  .buy-box-price-label{font-size:.7rem;color:var(--muted);margin-bottom:2px;}
+  .buy-box-curr{font-size:.8rem;color:var(--gold);font-weight:700;margin-top:3px;text-shadow:var(--glow-gold-sm);}
+  .buy-box-int{font-size:1.8rem;color:var(--gold);font-weight:800;line-height:1;text-shadow:var(--glow-gold);}
+  .buy-box-dec{font-size:.8rem;color:var(--gold);font-weight:700;margin-top:3px;}
+  .buy-box-unit{font-size:.72rem;color:var(--muted);}
+  .buy-box-avail{
+    font-size:.82rem;color:var(--moss);font-weight:700;
+    display:flex;align-items:center;gap:5px;
+  }
+  .buy-box-avail::before{content:'●';font-size:.6rem;}
+  .buy-box-contact{font-size:.82rem;color:var(--bronze);font-weight:600;}
+  .buy-box-divider{height:1px;background:var(--border);margin:2px 0;}
+  .buy-box-qty-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600;}
+  .qty-selector{
+    display:flex;align-items:center;gap:10px;
+    background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 12px;width:fit-content;
+  }
+  .qty-selector button{
+    background:none;border:none;color:var(--text);font-size:1.2rem;cursor:pointer;
+    width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:.2s;
+  }
   .qty-selector button:hover{background:var(--gold);color:#0e0b1e;}
   .qty-selector span{font-weight:700;font-size:1rem;min-width:22px;text-align:center;}
 
-  /* Orders */
-  .orders-view{padding:16px;flex-direction:column;gap:12px;display:none;}
-  .order-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
-  .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .order-id{font-family:'Fredoka One',cursive;font-weight:400;font-size:.92rem;letter-spacing:.3px;}
-  .order-status{font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px;}
+  /* Add to cart & buy now buttons */
+  .buy-box-add-btn{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#0e0b1e;border:none;border-radius:8px;padding:13px;
+    font-weight:700;font-size:.9rem;font-family:'Fredoka One',cursive;
+    cursor:pointer;transition:.2s;width:100%;letter-spacing:.5px;
+    box-shadow:var(--glow-gold);
+  }
+  .buy-box-add-btn:hover{opacity:.92;}
+  .buy-box-order-btn{
+    background:linear-gradient(135deg,var(--bronze),var(--bronze2));
+    color:#f0ead8;border:none;border-radius:8px;padding:11px;
+    font-weight:700;font-size:.85rem;font-family:'Fredoka One',cursive;
+    cursor:pointer;transition:.2s;width:100%;letter-spacing:.5px;
+    box-shadow:0 0 10px rgba(196,124,62,.4);
+    text-decoration:none;display:block;text-align:center;
+  }
+  .buy-box-order-btn:hover{opacity:.92;}
+
+  /* ===================================================================
+     AMAZON-STYLE ORDERS VIEW
+  =================================================================== */
+  .orders-view{padding:0 0 110px;flex-direction:column;gap:0;display:none;}
+  .orders-header-box{
+    background:var(--card);border-bottom:1px solid var(--border);
+    padding:16px;
+  }
+  .orders-header-box h2{font-family:'Fredoka One',cursive;font-size:1.2rem;font-weight:400;letter-spacing:.3px;}
+  .orders-header-box p{font-size:.75rem;color:var(--muted);margin-top:3px;}
+  .orders-list{padding:12px;display:flex;flex-direction:column;gap:10px;}
+  /* Each order = Amazon-style card with header strip */
+  .order-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  }
+  .order-card-header{
+    background:var(--bg3);border-bottom:1px solid var(--border);
+    padding:10px 14px;display:grid;
+    grid-template-columns:1fr 1fr;gap:4px 16px;
+  }
+  .order-meta-label{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+  .order-meta-val{font-size:.78rem;color:var(--text);font-weight:600;margin-top:1px;}
+  .order-card-body{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .order-items-text{color:var(--muted);font-size:.76rem;line-height:1.4;flex:1;}
+  .order-status{
+    font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;
+  }
   .status-pending{background:rgba(232,184,75,.15);color:var(--gold);box-shadow:0 0 6px rgba(232,184,75,.2);}
   .status-shipped{background:rgba(196,124,62,.15);color:var(--bronze);box-shadow:0 0 6px rgba(196,124,62,.2);}
   .status-delivered{background:rgba(74,124,89,.2);color:#7ecf96;box-shadow:0 0 6px rgba(74,124,89,.25);}
-  .order-items{color:var(--muted);font-size:.78rem;margin-bottom:8px;}
-  .order-total{color:var(--gold);font-weight:700;font-size:.88rem;text-shadow:var(--glow-gold-sm);}
+  .order-card-footer{
+    border-top:1px solid var(--border);padding:8px 14px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .order-note-text{color:var(--muted);font-size:.72rem;font-style:italic;}
+  .order-total-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .order-total-val{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--gold);text-shadow:var(--glow-gold-sm);}
 
-  /* Account view */
-  .account-view{padding:16px;flex-direction:column;gap:14px;display:none;}
-  .profile-card{
-    background:var(--card);border:1px solid rgba(232,184,75,.18);border-radius:var(--radius);
-    padding:24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;
-    box-shadow:0 0 24px rgba(232,184,75,.07);
+  /* ===================================================================
+     AMAZON-STYLE ACCOUNT VIEW
+  =================================================================== */
+  .account-view{padding:0 0 110px;flex-direction:column;gap:0;display:none;}
+  .account-header-box{
+    background:var(--card);border-bottom:1px solid var(--border);
+    padding:16px;display:flex;align-items:center;gap:14px;
   }
   .profile-avatar{
-    width:70px;height:70px;border-radius:50%;
+    width:56px;height:56px;border-radius:50%;
     background:linear-gradient(135deg,var(--gold),var(--bronze));
-    display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;
-    color:#0e0b1e;font-family:'Fredoka One',cursive;box-shadow:var(--glow-gold);
+    display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;
+    color:#0e0b1e;font-family:'Fredoka One',cursive;box-shadow:var(--glow-gold);flex-shrink:0;
   }
-  .profile-name{font-family:'Fredoka One',cursive;font-weight:400;font-size:1.2rem;letter-spacing:.3px;}
+  .profile-info{flex:1;}
+  .profile-name{font-family:'Fredoka One',cursive;font-size:1.1rem;font-weight:400;letter-spacing:.3px;}
   .profile-badge{
+    display:inline-block;margin-top:3px;
     background:linear-gradient(135deg,var(--gold),var(--bronze));
-    color:#0e0b1e;border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700;
+    color:#0e0b1e;border-radius:20px;padding:2px 10px;font-size:.68rem;font-weight:800;
     box-shadow:var(--glow-gold-sm);
+  }
+  /* Account sections */
+  .account-section{margin:12px;}
+  .account-section-title{
+    font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;
+    padding:0 4px 6px;border-bottom:1px solid var(--border);margin-bottom:6px;
   }
   .menu-item{
     background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-    padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s;
+    padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s;
+    margin-bottom:6px;text-decoration:none;color:inherit;
   }
   .menu-item:hover{border-color:rgba(232,184,75,.4);box-shadow:0 0 14px rgba(232,184,75,.07);}
-  .menu-icon{font-size:1.4rem;width:32px;text-align:center;}
-  .menu-item h3{font-family:'Fredoka One',cursive;font-size:.95rem;font-weight:400;letter-spacing:.3px;}
-  .menu-item p{color:var(--muted);font-size:.75rem;margin-top:2px;}
-  .menu-item .arrow{margin-left:auto;color:var(--muted);}
+  .menu-icon{font-size:1.3rem;width:30px;text-align:center;flex-shrink:0;}
+  .menu-item-text{flex:1;}
+  .menu-item h3{font-family:'Fredoka One',cursive;font-size:.92rem;font-weight:400;letter-spacing:.3px;}
+  .menu-item p{color:var(--muted);font-size:.72rem;margin-top:2px;}
+  .menu-item .arrow{margin-left:auto;color:var(--muted);font-size:1.1rem;}
+  /* Seller Central (admin) */
+  .seller-central-header{
+    background:linear-gradient(135deg,#1a1000,#2a1a00);
+    border:1px solid rgba(232,184,75,.3);border-radius:var(--radius) var(--radius) 0 0;
+    padding:10px 14px;display:flex;align-items:center;gap:10px;
+    margin-bottom:0;
+  }
+  .seller-central-title{
+    font-family:'Fredoka One',cursive;font-size:.88rem;color:var(--gold);letter-spacing:.5px;
+    text-shadow:var(--glow-gold-sm);
+  }
+  .seller-central-menu{
+    background:var(--card);border:1px solid rgba(232,184,75,.15);border-top:none;
+    border-radius:0 0 var(--radius) var(--radius);overflow:hidden;margin-bottom:12px;
+  }
+  .seller-menu-item{
+    padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s;
+    border-top:1px solid var(--border);
+  }
+  .seller-menu-item:hover{background:rgba(232,184,75,.05);}
+  .seller-menu-item .menu-icon{font-size:1.1rem;}
+  .seller-menu-item h3{font-family:'Fredoka One',cursive;font-size:.88rem;font-weight:400;}
+  .seller-menu-item p{color:var(--muted);font-size:.7rem;margin-top:1px;}
+  .seller-menu-item .arrow{margin-left:auto;color:var(--muted);}
 
   /* Login panel */
   .input-group{display:flex;flex-direction:column;gap:5px;}
@@ -384,15 +648,12 @@
   }
   .photo-upload:hover{border-color:var(--gold);}
   .photo-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-  .photo-preview{width:100%;height:120px;object-fit:cover;border-radius:10px;display:none;}
   .select-input{
     background:var(--bg3);border:1px solid var(--border);border-radius:10px;
     padding:11px 14px;color:var(--text);font-size:.88rem;font-family:inherit;outline:none;
     appearance:none;cursor:pointer;
   }
   .select-input:focus{border-color:var(--gold);}
-
-  /* Checkout */
   .checkout-btn{
     background:linear-gradient(135deg,var(--gold),var(--gold2));
     color:#0e0b1e;border:none;border-radius:12px;padding:15px;
@@ -433,12 +694,12 @@
 
   /* ===== PHARMA VIEW ===== */
   .pharma-view{padding:0 0 110px;flex-direction:column;gap:0;display:none;}
-  .pharma-hero{margin:16px 16px 0;border-radius:var(--radius);padding:16px 18px;background:linear-gradient(135deg,#0d1a2e,#112240);border:1px solid rgba(124,156,245,.25);display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+  .pharma-hero{margin:12px 12px 0;border-radius:var(--radius);padding:14px 16px;background:linear-gradient(135deg,#0d1a2e,#112240);border:1px solid rgba(124,156,245,.25);display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
   .pharma-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(124,156,245,.05),transparent);animation:shimmer 3s ease-in-out infinite;}
   .pharma-hero-icon{font-size:2rem;flex-shrink:0;}
   .pharma-hero-title{font-family:'Fredoka One',cursive;font-size:1rem;color:#a8c4ff;letter-spacing:.5px;}
   .pharma-hero-sub{font-size:.72rem;color:var(--muted);margin-top:2px;}
-  .brand-tabs{display:flex;gap:8px;padding:14px 16px 6px;overflow-x:auto;scrollbar-width:none;}
+  .brand-tabs{display:flex;gap:8px;padding:14px 12px 6px;overflow-x:auto;scrollbar-width:none;}
   .brand-tabs::-webkit-scrollbar{display:none;}
   .brand-tab{background:var(--bg3);border:1px solid var(--border);border-radius:30px;padding:6px 14px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;transition:.2s;font-family:inherit;}
   .brand-tab.active-all{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0e0b1e;border-color:var(--gold);box-shadow:var(--glow-gold);}
@@ -446,12 +707,12 @@
   .brand-tab.active-astera{background:#3a1a6e;color:#c47cff;border-color:#8a3aee;box-shadow:0 0 10px rgba(138,58,238,.3);}
   .brand-tab.active-biaxol{background:#3a2a00;color:#f5c842;border-color:#c49430;box-shadow:0 0 10px rgba(196,148,48,.3);}
   .brand-tab:hover{border-color:var(--gold);color:var(--text);}
-  .cat-tabs{display:flex;gap:6px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;}
+  .cat-tabs{display:flex;gap:6px;padding:4px 12px 10px;overflow-x:auto;scrollbar-width:none;}
   .cat-tabs::-webkit-scrollbar{display:none;}
   .cat-tab{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.72rem;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;transition:.2s;font-family:inherit;}
   .cat-tab.active{background:rgba(232,184,75,.15);color:var(--gold);border-color:rgba(232,184,75,.4);}
   .cat-tab:hover:not(.active){border-color:var(--gold);color:var(--text);}
-  .brand-section{margin:8px 16px 0;}
+  .brand-section{margin:8px 12px 0;}
   .brand-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px 12px 0 0;font-family:'Fredoka One',cursive;font-size:.88rem;letter-spacing:.5px;}
   .brand-header.deus{background:linear-gradient(135deg,#0d1e40,#112a5a);color:#7cb4ff;border:1px solid rgba(60,122,238,.2);border-bottom:none;}
   .brand-header.astera{background:linear-gradient(135deg,#1a0d40,#241258);color:#c47cff;border:1px solid rgba(138,58,238,.2);border-bottom:none;}
@@ -473,29 +734,64 @@
   .pharma-add-btn:hover{transform:scale(1.15);}
   .pharma-empty{text-align:center;color:var(--muted);padding:32px;font-size:.85rem;}
 
+  /* Pulsing dot */
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:var(--glow-gold-sm)}50%{opacity:.35;box-shadow:none}}
 </style>
 </head>
 <body>
 <div id="app">
-  <!-- HEADER -->
+
+  <!-- LED LINE -->
   <div class="led-line"></div>
+
+  <!-- ===== AMAZON-STYLE HEADER ===== -->
   <div class="header">
-    <div class="header-logo">
+    <!-- Logo block (left) -->
+    <div class="header-logo" onclick="showView('catalog')">
       <span class="the-word">the</span>
       <span class="titan-word">Titan</span>
       <span class="pharm-word">Pharmacy</span>
     </div>
+
+    <!-- Search bar (center) -->
+    <div class="header-search">
+      <input type="text" placeholder="Cerca prodotti..." id="search-input" oninput="filterProducts()" />
+      <button class="header-search-btn" onclick="filterProducts()">🔍</button>
+    </div>
+
+    <!-- Account + Cart (right) -->
     <div class="header-right">
-      <span style="font-size:.72rem;color:var(--muted)"><span class="online-dot"></span>Barcelona 🇪🇸</span>
+      <div class="hdr-account-btn" onclick="showView('account')">
+        <span>👤</span>
+        <span class="hdr-lbl">Account</span>
+      </div>
       <button class="cart-btn" onclick="openCart()">
-        🛒 <span id="cart-label">Cart</span>
-        <span class="cart-count" id="cart-count">0</span>
+        <span class="cart-btn-icon">
+          🛒
+          <span class="cart-count" id="cart-count">0</span>
+        </span>
+        <span class="cart-btn-lbl" id="cart-label">Carrello</span>
       </button>
     </div>
   </div>
 
-  <!-- CATALOG VIEW -->
+  <!-- ===== AMAZON-STYLE SUB-NAV (category strip) ===== -->
+  <div class="sub-nav" id="filter-tabs">
+    <button class="sub-nav-item active" onclick="setFilter(this,'all')">🔥 Tutti</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'drysift')">🇲🇦 Dry Sift</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'plasma')">🔝 Plasma</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'frozen')">🧊 Frozen</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'cali')">🇺🇸 Cali USA</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'spain')">🇪🇸 Spain</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'vape')">💨 Vape</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'premium')">💎 Premium</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'hash')">🪨 Hash</button>
+    <button class="sub-nav-item" onclick="setFilter(this,'cbd')">🌿 CBD</button>
+  </div>
+
+  <!-- ===== CATALOG VIEW ===== -->
   <div id="catalog-view">
+
     <!-- Shipping banner -->
     <div class="banner banner-ship">
       <div class="banner-icon">🚀</div>
@@ -513,47 +809,36 @@
       <span style="font-size:1.4rem;margin-left:auto">🔥</span>
     </div>
 
-    <!-- Marquee -->
+    <!-- Marquee ticker -->
     <div class="marquee-wrap">
       <div class="marquee" id="marquee-inner"></div>
     </div>
 
-    <div class="search-bar" style="margin-top:12px">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Cerca prodotti..." id="search-input" oninput="filterProducts()" />
+    <!-- Results bar (Amazon "Results for…") -->
+    <div class="results-bar">
+      <div class="results-count" id="products-count">Prodotti</div>
+      <div class="results-sort">↕ Per rilevanza</div>
     </div>
 
-    <div class="nav-tabs" id="filter-tabs">
-      <button class="nav-tab active" onclick="setFilter(this,'all')">🔥 All</button>
-      <button class="nav-tab" onclick="setFilter(this,'drysift')">🇲🇦 Dry Sift</button>
-      <button class="nav-tab" onclick="setFilter(this,'plasma')">🔝 Plasma</button>
-      <button class="nav-tab" onclick="setFilter(this,'frozen')">🧊 Frozen</button>
-      <button class="nav-tab" onclick="setFilter(this,'cali')">🇺🇸 Cali USA</button>
-      <button class="nav-tab" onclick="setFilter(this,'spain')">🇪🇸 Spain</button>
-      <button class="nav-tab" onclick="setFilter(this,'vape')">💨 Vape</button>
-      <button class="nav-tab" onclick="setFilter(this,'premium')">💎 Premium</button>
-      <button class="nav-tab" onclick="setFilter(this,'hash')">🪨 Hash</button>
-      <button class="nav-tab" onclick="setFilter(this,'cbd')">🌿 CBD</button>
-    </div>
-
-    <p class="section-title" id="products-count">Products</p>
+    <!-- Products grid -->
     <div class="products-grid" id="products-grid"></div>
   </div>
 
-  <!-- ORDERS VIEW -->
+  <!-- ===== ORDERS VIEW (Amazon My Orders) ===== -->
   <div class="orders-view" id="orders-view">
-    <p class="section-title" style="padding:0">I Tuoi Ordini</p>
-    <div id="orders-list"></div>
+    <div class="orders-header-box">
+      <h2>📋 I Miei Ordini</h2>
+      <p>Storico completo dei tuoi ordini Titan Pharmacy</p>
+    </div>
+    <div class="orders-list" id="orders-list"></div>
   </div>
 
-  <!-- ACCOUNT VIEW -->
+  <!-- ===== ACCOUNT VIEW (Amazon Account) ===== -->
   <div class="account-view" id="account-view">
-    <p class="section-title" style="padding:0">Account</p>
     <div id="account-content"></div>
   </div>
 
-
-  <!-- PHARMA VIEW -->
+  <!-- ===== PHARMA VIEW ===== -->
   <div class="pharma-view" id="pharma-view">
     <div class="pharma-hero">
       <div class="pharma-hero-icon">💉</div>
@@ -583,7 +868,7 @@
   <!-- ADMIN FAB -->
   <button class="admin-fab" id="admin-fab" onclick="openProductForm(null)" title="Aggiungi prodotto al catalogo">＋</button>
 
-  <!-- BOTTOM NAV -->
+  <!-- ===== BOTTOM NAV ===== -->
   <div class="bottom-nav">
     <div class="nav-item active" id="nav-catalog" onclick="showView('catalog')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
@@ -608,20 +893,32 @@
   </div>
 </div>
 
-<!-- CART PANEL -->
+<!-- ===== CART PANEL (Amazon style) ===== -->
 <div class="panel" id="cart-panel">
   <div class="panel-overlay" onclick="closePanel('cart-panel')"></div>
   <div class="panel-content">
     <div class="panel-handle"></div>
     <div class="panel-title">🛒 Carrello</div>
+
+    <!-- Amazon-style summary box at top -->
+    <div id="cart-summary-area"></div>
+
+    <!-- Items list -->
     <div id="cart-items-list"></div>
+
+    <!-- Note textarea -->
+    <div id="cart-note-wrap" style="display:none">
+      <textarea id="order-note" placeholder="Note sull'ordine (opzionale)..." rows="2"></textarea>
+    </div>
+
+    <!-- Legacy hidden elements (needed by JS) -->
     <div id="cart-total-row" class="cart-total" style="display:none">
-      <div>
-        <div class="total-label">Totale ordine</div>
-        <div style="font-size:.7rem;color:var(--muted)">+ Spedizione flat <strong style="color:var(--green)">€15</strong></div>
-      </div>
+      <div class="total-label">Totale ordine</div>
       <div class="total-amount" id="cart-total-amount">€0</div>
     </div>
+    <button class="checkout-btn" id="checkout-btn" onclick="placeOrder()" disabled style="display:none">📲 Invia Ordine su Telegram →</button>
+  </div>
+</div>
 
 <!-- SHIPPING INFO PANEL -->
 <div class="panel" id="shipping-panel">
@@ -630,34 +927,28 @@
     <div class="panel-handle"></div>
     <div class="panel-title">🚚 Info Spedizione</div>
     <div style="display:flex;flex-direction:column;gap:14px">
-      <div style="background:var(--bg3);border:1px solid rgba(61,255,110,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
+      <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
         <span style="font-size:1.6rem">⏱️</span>
         <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Tempi di elaborazione</div><div style="color:var(--muted);font-size:.82rem;line-height:1.5">Il pacco viene spedito entro <strong style="color:var(--text)">24 ore lavorative</strong> dalla conferma dell'ordine.</div></div>
       </div>
-      <div style="background:var(--bg3);border:1px solid rgba(61,255,110,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
+      <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
         <span style="font-size:1.6rem">📍</span>
         <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Tracking</div><div style="color:var(--muted);font-size:.82rem;line-height:1.5">Il codice di tracciamento sarà disponibile entro <strong style="color:var(--text)">24 ore dall'avvenuta spedizione</strong>. Riceverai una notifica su Telegram.</div></div>
       </div>
-      <div style="background:var(--bg3);border:1px solid rgba(61,255,110,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
+      <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
         <span style="font-size:1.6rem">🚚</span>
-        <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Corrieri supportati</div><div style="color:var(--muted);font-size:.82rem;line-height:1.5">Spediamo tramite <strong style="color:var(--text)">UPS · DHL · INPOST</strong>. Il corriere viene scelto in base alla tua zona per garantire la massima discrezione.</div></div>
+        <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Corrieri supportati</div><div style="color:var(--muted);font-size:.82rem;line-height:1.5">Spediamo tramite <strong style="color:var(--text)">UPS · DHL · INPOST</strong>. Il corriere viene scelto in base alla tua zona.</div></div>
       </div>
-      <div style="background:linear-gradient(135deg,#0a1f0e,#0d2e14);border:1px solid rgba(61,255,110,.3);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:center">
+      <div style="background:linear-gradient(135deg,#0a1f0e,#0d2e14);border:1px solid rgba(74,124,89,.3);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:center">
         <span style="font-size:1.6rem">💶</span>
-        <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Costo spedizione</div><div style="color:var(--muted);font-size:.82rem">Tariffa fissa <strong style="color:var(--green);font-size:1.1rem;text-shadow:var(--led-green)">€15</strong> — sempre, ovunque in Europa.</div></div>
+        <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Costo spedizione</div><div style="color:var(--muted);font-size:.82rem">Tariffa fissa <strong style="color:var(--moss);font-size:1.1rem">€15</strong> — sempre, ovunque in Europa.</div></div>
       </div>
-      <div style="background:var(--bg3);border:1px solid rgba(61,255,110,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
+      <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.15);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start">
         <span style="font-size:1.6rem">📦</span>
         <div><div style="font-weight:700;font-size:.9rem;margin-bottom:3px">Imballaggio</div><div style="color:var(--muted);font-size:.82rem;line-height:1.5">Ogni spedizione è <strong style="color:var(--text)">anonima e sigillata sottovuoto</strong>. Nessuna indicazione del contenuto all'esterno.</div></div>
       </div>
     </div>
     <a href="https://t.me/titanpharmacyceo" target="_blank" class="checkout-btn" style="display:block;text-align:center;text-decoration:none;padding:15px">📲 Contattaci su Telegram</a>
-  </div>
-</div>
-    <div id="cart-note-wrap" style="display:none">
-      <textarea id="order-note" placeholder="Note sull'ordine (opzionale)..." rows="2"></textarea>
-    </div>
-    <button class="checkout-btn" id="checkout-btn" onclick="placeOrder()" disabled>📲 Invia Ordine su Telegram →</button>
   </div>
 </div>
 
@@ -682,7 +973,7 @@
       <input type="password" id="login-pass" placeholder="••••••••" />
     </div>
     <button class="btn-primary" onclick="doLogin()">Accedi →</button>
-    <p class="login-note">Non hai un account? <a href="https://t.me/titanpharmacyceo" target="_blank" style="color:var(--green);text-decoration:none;font-weight:700">Contattaci su Telegram</a> per registrarti</p>
+    <p class="login-note">Non hai un account? <a href="https://t.me/titanpharmacyceo" target="_blank" style="color:var(--moss);text-decoration:none;font-weight:700">Contattaci su Telegram</a> per registrarti</p>
   </div>
 </div>
 
@@ -855,22 +1146,18 @@ const ADMIN_PASS = 'titan2024';
 async function loadProductsFromFirebase() {
   try {
     showLoadingGrid();
-    // Real-time listener senza orderBy per evitare errori di indice
     onSnapshot(collection(db, 'products'), (snapshot) => {
       if (snapshot.empty) {
         seedDefaultProducts();
       } else {
         PRODUCTS = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
-        // Sync any new DEFAULT_PRODUCTS not yet in Firebase
         syncMissingProducts(snapshot);
-        // Ordina per campo order se disponibile, altrimenti per nome
         PRODUCTS.sort((a,b) => (a.order ?? 99) - (b.order ?? 99));
         renderProducts();
         renderAdminList();
       }
     }, (error) => {
       console.error('Firebase listener error:', error);
-      // Fallback ai prodotti default se Firebase fallisce
       PRODUCTS = DEFAULT_PRODUCTS;
       renderProducts();
     });
@@ -953,7 +1240,6 @@ function showView(view){
   });
   if(view==='account') renderAccount();
   if(view==='pharma') renderPharma();
-  // Show admin FAB only on catalog view
   const fab = document.getElementById('admin-fab');
   if(fab) fab.classList.toggle('visible', view==='catalog' && isAdmin);
 }
@@ -969,14 +1255,41 @@ if(isAdmin){ const fab=document.getElementById('admin-fab'); if(fab) fab.classLi
 // ===== PRODUCTS =====
 function setFilter(el, filter){
   currentFilter = filter;
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sub-nav-item').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   renderProducts();
 }
 function filterProducts(){ renderProducts(); }
 
-function getBadgeLabel(b){
-  return {premium:'💎 Premium',frozen:'🧊 Frozen',new:'✨ New',hash:'🪨 Hash',cbd:'🌿 CBD'}[b] || b;
+// Generate fake star count for visual flair
+function fakeStars(id){
+  const seed = typeof id === 'number' ? id : (id.charCodeAt?.(0)||5);
+  const base = 4;
+  const dec = (seed * 7) % 10;
+  return base + '.' + dec;
+}
+function fakeReviewCount(id){
+  const seed = typeof id === 'number' ? id : (id.charCodeAt?.(0)||5);
+  return 80 + (seed * 13 % 200);
+}
+
+function renderStars(rating){
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5 ? 1 : 0;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - half);
+}
+
+function getPrimeBadgeLabel(badge){
+  const labels = {
+    premium:'💎 Titan Prime ✓',
+    frozen:'❄️ Titan Prime ✓',
+    new:'✨ Titan Prime ✓',
+    hash:'🪨 Titan Prime ✓',
+    cbd:'🌿 Titan Prime ✓',
+    drysift:'🇲🇦 Titan Prime ✓',
+    plasma:'🔝 Titan Prime ✓',
+  };
+  return labels[badge] || 'Titan Prime ✓';
 }
 
 function renderProducts(){
@@ -986,32 +1299,51 @@ function renderProducts(){
     const matchSearch = !search || p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search) || p.origin.toLowerCase().includes(search);
     return matchCat && matchSearch;
   });
-  document.getElementById('products-count').textContent = `${filtered.length} Product${filtered.length!==1?'s':''}`;
+  document.getElementById('products-count').innerHTML = `<strong>${filtered.length}</strong> risultati per <strong style="color:var(--gold)">"${currentFilter === 'all' ? 'tutti i prodotti' : currentFilter}"</strong>`;
   const grid = document.getElementById('products-grid');
   if(!filtered.length){
     grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px;font-size:.88rem">Nessun prodotto trovato 🌿</div>`;
     return;
   }
-  grid.innerHTML = filtered.map((p,idx)=>`
+  grid.innerHTML = filtered.map((p,idx)=>{
+    const hasPrice = p.price && p.price > 0;
+    const priceInt = hasPrice ? Math.floor(p.price) : null;
+    const priceDec = hasPrice ? String(p.price.toFixed(2)).split('.')[1] : null;
+    const stars = parseFloat(fakeStars(p.id));
+    const reviews = fakeReviewCount(p.id);
+    return `
     <div class="product-card" onclick="openDetail(${idx})">
       <div class="product-img">
         ${p.photo ? `<img src="${p.photo}" alt="${p.name}">` : ''}
         <span class="emoji-fallback" ${p.photo?'style="display:none"':''}>${p.emoji||'🌿'}</span>
-        <div class="product-badge ${p.badge}">${getBadgeLabel(p.badge)}</div>
+        <div class="product-badge ${p.badge}">${getPrimeBadgeLabel(p.badge)}</div>
       </div>
       <div class="product-info">
         <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc.substring(0,58)}…</div>
-        <div class="product-footer">
-          <div class="product-price">€${p.price} <span>from ${p.unit}</span></div>
-          <button class="add-btn" onclick="event.stopPropagation();addToCartByIndex(${idx},1)">+</button>
+        <div class="product-stars">
+          <span class="stars-icons">${renderStars(stars)}</span>
+          <span class="stars-count">(${reviews})</span>
         </div>
+        <div class="prime-badge">✈ Titan Prime ✓</div>
+        <div class="product-price-block">
+          ${hasPrice ? `
+          <div class="price-top">
+            <span class="price-currency">€</span>
+            <span class="price-int">${priceInt}</span>
+            <span class="price-dec">${priceDec}</span>
+          </div>
+          <div class="price-unit">da ${p.unit} · €${p.priceG}/g</div>
+          ` : `<div class="price-contact">💬 Contattaci per il prezzo</div>`}
+        </div>
+        <button class="add-btn" onclick="event.stopPropagation();addToCartByIndex(${idx},1)">
+          🛒 Aggiungi
+        </button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
-// ===== DETAIL =====
+// ===== DETAIL (Buy Box style) =====
 function getFilteredProducts(){
   const search = document.getElementById('search-input').value.toLowerCase();
   return PRODUCTS.filter(p=>{
@@ -1027,31 +1359,83 @@ function openDetail(idx){
   if(!p) return;
   detailQty = 1;
   const pid = p.id;
+  const hasPrice = p.price && p.price > 0;
+  const priceInt = hasPrice ? Math.floor(p.price) : null;
+  const priceDec = hasPrice ? String(p.price.toFixed(2)).split('.')[1] : null;
+  const stars = parseFloat(fakeStars(p.id));
+  const reviews = fakeReviewCount(p.id);
+
+  // Build bullet points from description sentences
+  const bullets = p.desc.split('. ').filter(Boolean).map(s => s.trim()).filter(s => s.length > 5);
+
   document.getElementById('detail-content').innerHTML = `
     <div class="panel-handle"></div>
+
+    <!-- Product image -->
     <div class="detail-img">
       ${p.photo?`<img src="${p.photo}" alt="${p.name}">`:''}
       <span class="de" ${p.photo?'style="display:none"':''}>${p.emoji||'🌿'}</span>
     </div>
-    <div>
-      <div class="detail-name">${p.name}</div>
-      <div class="detail-origin">🌍 Origin: ${p.origin||''}</div>
+
+    <!-- Badge row -->
+    <div class="detail-badge-row">
+      <span class="detail-prime">✈ Titan Prime ✓</span>
+      <span style="font-size:.7rem;color:var(--muted)">🌍 ${p.origin||'Unknown'}</span>
     </div>
-    <div class="detail-desc">${p.desc||''}</div>
+
+    <!-- Title -->
+    <div class="detail-name">${p.name}</div>
+
+    <!-- Stars -->
+    <div class="detail-stars">
+      <span class="stars-icons">${renderStars(stars)}</span>
+      <span class="stars-lbl">${stars} · ${reviews} recensioni</span>
+    </div>
+
+    <!-- Tags -->
     <div class="detail-tags">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    <div class="detail-price-row">
-      <div>
-        <div class="detail-price">€${p.price}</div>
-        <div class="detail-unit">from ${p.unit||'10g'} · €${p.priceG||0}/g</div>
-      </div>
-      <div class="qty-selector">
-        <button onclick="changeDetailQty(-1)">−</button>
-        <span id="detail-qty">1</span>
-        <button onclick="changeDetailQty(1)">+</button>
-      </div>
+
+    <!-- Description as Amazon bullet points -->
+    <div class="detail-bullets">
+      ${bullets.map(b=>`<div class="detail-bullet">${b}</div>`).join('')}
     </div>
-    <button class="checkout-btn" onclick="addToCartById('${pid}',parseInt(document.getElementById('detail-qty').textContent));closePanel('detail-panel');showToast('✅ Aggiunto al carrello!')">🛒 Aggiungi al Carrello</button>
-    <a href="https://t.me/titanpharmacyceo" target="_blank" style="display:block;text-align:center;color:var(--muted);font-size:.78rem;margin-top:-4px;text-decoration:none">💬 Oppure <span style="color:var(--green);font-weight:700">ordina direttamente su Telegram</span></a>
+
+    <!-- BUY BOX -->
+    <div class="buy-box">
+      ${hasPrice ? `
+        <div>
+          <div class="buy-box-price-label">Prezzo</div>
+          <div class="buy-box-price-row">
+            <span class="buy-box-curr">€</span>
+            <span class="buy-box-int">${priceInt}</span>
+            <span class="buy-box-dec">${priceDec}</span>
+          </div>
+          <div class="buy-box-unit">da ${p.unit||'10g'} · €${p.priceG||0}/g</div>
+        </div>
+        <div class="buy-box-divider"></div>
+        <div class="buy-box-avail">Disponibilità immediata</div>
+        <div class="buy-box-divider"></div>
+        <div>
+          <div class="buy-box-qty-label">Quantità</div>
+          <div class="qty-selector" style="margin-top:6px">
+            <button onclick="changeDetailQty(-1)">−</button>
+            <span id="detail-qty">1</span>
+            <button onclick="changeDetailQty(1)">+</button>
+          </div>
+        </div>
+        <button class="buy-box-add-btn" onclick="addToCartById('${pid}',parseInt(document.getElementById('detail-qty').textContent));closePanel('detail-panel');showToast('✅ Aggiunto al carrello!')">
+          🛒 Aggiungi al Carrello
+        </button>
+        <a href="https://t.me/titanpharmacyceo" target="_blank" class="buy-box-order-btn">
+          📲 Procedi con Telegram →
+        </a>
+      ` : `
+        <div class="buy-box-contact">💬 Contattaci per il prezzo e la disponibilità</div>
+        <a href="https://t.me/titanpharmacyceo" target="_blank" class="buy-box-order-btn">
+          📲 Contattaci su Telegram →
+        </a>
+      `}
+    </div>
   `;
   document.getElementById('detail-panel').classList.add('open');
 }
@@ -1068,7 +1452,7 @@ function addToCartById(id, qty=1){
   id = String(id);
   const e=cart.find(x=>String(x.id)===id);
   if(e) e.qty+=qty; else cart.push({id, qty});
-  saveCart(); updateCartUI(); showToast('✅ Added to cart!');
+  saveCart(); updateCartUI(); showToast('✅ Aggiunto al carrello!');
 }
 function addToCart(id, qty=1){ addToCartById(id, qty); }
 function changeQty(id,d){
@@ -1083,16 +1467,14 @@ function updateCartUI(){
   const total=cart.reduce((s,x)=>s+x.qty,0);
   const c=document.getElementById('cart-count');
   c.textContent=total; c.style.display=total>0?'flex':'none';
-  document.getElementById('cart-label').textContent=total>0?`(${total})`:'Cart';
+  document.getElementById('cart-label').textContent=total>0?`(${total})`:'Carrello';
 }
 function openCart(){ renderCartPanel(); document.getElementById('cart-panel').classList.add('open'); }
-// renderCartPanel defined below (unified)
 
 // ===== ORDERS =====
 function placeOrder(){
   const note=document.getElementById('order-note').value;
 
-  // Build item lines with emoji
   const itemLines = cart.map(x=>{
     if(String(x.id).startsWith('pharma_')){
       const pp=PHARMA_LOCAL.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
@@ -1121,7 +1503,6 @@ function placeOrder(){
   orders.unshift(o);
   localStorage.setItem('tp_orders',JSON.stringify(orders));
 
-  // 📲 Build pre-filled Telegram message
   const user = currentUser || 'Guest';
   const msgLines = [
     '🛒 *NUOVO ORDINE — The Titan Pharmacy*',
@@ -1139,7 +1520,6 @@ function placeOrder(){
 
   const msg = msgLines.join('\n');
 
-  // 📲 Telegram WebApp native (if inside Telegram)
   if (window.Telegram?.WebApp) {
     window.Telegram.WebApp.sendData(JSON.stringify({order_id:orderId,user,items:o.items,total:tot,note,date}));
   }
@@ -1149,76 +1529,148 @@ function placeOrder(){
   renderOrders();
   showToast('🎉 Ordine pronto! #'+orderId);
 
-  // Open Telegram with pre-filled message
   setTimeout(()=>{
     const tgUrl = 'https://t.me/titanpharmacyceo?text=' + encodeURIComponent(msg);
     window.open(tgUrl, '_blank');
   }, 600);
 }
+
+// ===== ORDERS RENDER (Amazon My Orders style) =====
 function renderOrders(){
   const list=document.getElementById('orders-list');
-  if(!orders.length){ list.innerHTML=`<div style="text-align:center;color:var(--muted);padding:40px;font-size:.88rem"><div style="font-size:3rem;margin-bottom:8px">📋</div><div style="margin-bottom:14px">Nessun ordine ancora</div><a href="https://t.me/titanpharmacyceo" target="_blank" style="display:inline-block;background:var(--green);color:#000;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-family:'Fredoka One',cursive;font-size:.9rem;box-shadow:var(--led-green)">📲 Ordina su Telegram</a></div>`; return; }
-  const sl={pending:'In attesa',shipped:'Spedito',delivered:'Consegnato'};
+  if(!orders.length){
+    list.innerHTML=`<div style="text-align:center;color:var(--muted);padding:40px;font-size:.88rem">
+      <div style="font-size:3rem;margin-bottom:8px">📋</div>
+      <div style="margin-bottom:14px">Nessun ordine ancora</div>
+      <a href="https://t.me/titanpharmacyceo" target="_blank" style="display:inline-block;background:var(--moss);color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-family:'Fredoka One',cursive;font-size:.9rem">📲 Ordina su Telegram</a>
+    </div>`;
+    return;
+  }
+  const sl={pending:'⏳ In attesa',shipped:'🚚 Spedito',delivered:'✅ Consegnato'};
   list.innerHTML=orders.map(o=>`
     <div class="order-card">
-      <div class="order-header">
-        <div class="order-id">#${o.id}</div>
+      <div class="order-card-header">
+        <div>
+          <div class="order-meta-label">Ordine effettuato</div>
+          <div class="order-meta-val">${o.date}</div>
+        </div>
+        <div>
+          <div class="order-meta-label">Totale ordine</div>
+          <div class="order-meta-val" style="color:var(--gold)">€${o.total}</div>
+        </div>
+        <div>
+          <div class="order-meta-label">N° ordine</div>
+          <div class="order-meta-val" style="font-size:.68rem">#${o.id}</div>
+        </div>
+      </div>
+      <div class="order-card-body">
+        <div class="order-items-text">${o.items}</div>
         <div class="order-status status-${o.status}">${sl[o.status]||o.status}</div>
       </div>
-      <div class="order-items">${o.items}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div style="color:var(--muted);font-size:.73rem">${o.date}</div>
-        <div class="order-total">€${o.total}</div>
-      </div>
-      ${o.note?`<div style="color:var(--muted);font-size:.73rem;margin-top:6px;border-top:1px solid var(--border);padding-top:6px">📝 ${o.note}</div>`:''}
+      ${o.note ? `
+      <div class="order-card-footer">
+        <div class="order-note-text">📝 ${o.note}</div>
+      </div>` : ''}
     </div>`).join('');
 }
 
-// ===== ACCOUNT =====
+// ===== ACCOUNT (Amazon Account layout) =====
 function renderAccount(){
-  // Always re-sync isAdmin from storage before rendering
   isAdmin = (localStorage.getItem('tp_admin') === '1') &&
             (localStorage.getItem('tp_admin_user') === localStorage.getItem('tp_user'));
   const c=document.getElementById('account-content');
   if(currentUser){
     c.innerHTML=`
-      <div class="profile-card">
+      <!-- Profile header -->
+      <div class="account-header-box">
         <div class="profile-avatar">${currentUser[0].toUpperCase()}</div>
-        <div class="profile-name">${currentUser}</div>
-        <div class="profile-badge">${isAdmin?'👑 Admin':'⭐ Cliente Fedele'}</div>
+        <div class="profile-info">
+          <div class="profile-name">${currentUser}</div>
+          <div class="profile-badge">${isAdmin?'👑 Admin Titan':'⭐ Cliente Fedele'}</div>
+        </div>
       </div>
-      ${isAdmin?`
-      <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.2);border-radius:var(--radius);overflow:hidden;margin-bottom:2px">
-        <div style="padding:10px 14px 6px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold)">⚙️ Admin</div>
-        <div class="menu-item" style="border:none;border-radius:0;border-top:1px solid var(--border)" onclick="openProductForm(null)">
-          <div class="menu-icon">➕</div><div><h3>Aggiungi Prodotto</h3><p>Aggiungi al catalogo principale</p></div><span class="arrow">›</span>
+
+      <!-- Seller Central (admin only) -->
+      ${isAdmin ? `
+      <div style="margin:12px">
+        <div class="seller-central-header">
+          <span style="font-size:1.2rem">⚙️</span>
+          <div class="seller-central-title">Seller Central — Gestisci Catalogo</div>
         </div>
-        <div class="menu-item" style="border:none;border-radius:0;border-top:1px solid var(--border)" onclick="openAdminPanel()">
-          <div class="menu-icon">📋</div><div><h3>Gestisci Catalogo</h3><p>Modifica o rimuovi prodotti</p></div><span class="arrow">›</span>
+        <div class="seller-central-menu">
+          <div class="seller-menu-item" onclick="openProductForm(null)">
+            <div class="menu-icon">➕</div>
+            <div><h3>Aggiungi Prodotto</h3><p>Aggiungi al catalogo principale</p></div>
+            <span class="arrow">›</span>
+          </div>
+          <div class="seller-menu-item" onclick="openAdminPanel()">
+            <div class="menu-icon">📋</div>
+            <div><h3>Gestisci Catalogo</h3><p>Modifica o rimuovi prodotti</p></div>
+            <span class="arrow">›</span>
+          </div>
+          <div class="seller-menu-item" onclick="openPharmaAdminPanel()">
+            <div class="menu-icon">💉</div>
+            <div><h3>Gestisci Pharma</h3><p>Modifica o rimuovi prodotti pharma</p></div>
+            <span class="arrow">›</span>
+          </div>
         </div>
-        <div class="menu-item" style="border:none;border-radius:0;border-top:1px solid var(--border)" onclick="openPharmaAdminPanel()">
-          <div class="menu-icon">💉</div><div><h3>Gestisci Pharma</h3><p>Modifica o rimuovi prodotti pharma</p></div><span class="arrow">›</span>
+      </div>` : ''}
+
+      <!-- User menu -->
+      <div class="account-section">
+        <div class="account-section-title">Il mio account</div>
+        <div class="menu-item" onclick="showView('orders')">
+          <div class="menu-icon">📋</div>
+          <div class="menu-item-text"><h3>I Miei Ordini</h3><p>Visualizza lo storico ordini</p></div>
+          <span class="arrow">›</span>
         </div>
-      </div>`:''}
-      <div class="menu-item" onclick="showView('orders')"><div class="menu-icon">📋</div><div><h3>I Miei Ordini</h3><p>Visualizza lo storico ordini</p></div><span class="arrow">›</span></div>
-      <a class="menu-item" href="https://t.me/titanpharmacyceo" target="_blank" style="text-decoration:none;color:inherit"><div class="menu-icon">💬</div><div><h3>Contattaci su Telegram</h3><p>Rispondiamo in pochi minuti</p></div><span class="arrow">›</span></a>
-      <div class="menu-item" onclick="document.getElementById('shipping-panel').classList.add('open')"><div class="menu-icon">🚀</div><div><h3>Info Spedizione</h3><p>Tempi · Tracking · Corrieri · Costi</p></div><span class="arrow">›</span></div>
-      <button class="btn-danger" onclick="doLogout()" style="margin-top:4px">Esci</button>
+        <a class="menu-item" href="https://t.me/titanpharmacyceo" target="_blank">
+          <div class="menu-icon">💬</div>
+          <div class="menu-item-text"><h3>Contattaci su Telegram</h3><p>Rispondiamo in pochi minuti</p></div>
+          <span class="arrow">›</span>
+        </a>
+        <div class="menu-item" onclick="document.getElementById('shipping-panel').classList.add('open')">
+          <div class="menu-icon">🚀</div>
+          <div class="menu-item-text"><h3>Info Spedizione</h3><p>Tempi · Tracking · Corrieri · Costi</p></div>
+          <span class="arrow">›</span>
+        </div>
+        <div style="margin-top:8px">
+          <button class="btn-danger" onclick="doLogout()" style="width:100%">Esci dall'account</button>
+        </div>
+      </div>
     `;
   } else {
     c.innerHTML=`
-      <div class="profile-card" style="gap:14px">
-        <div style="font-size:3.5rem">👤</div>
-        <div style="font-weight:400;font-family:'Fredoka One',cursive;font-size:1.1rem">Non sei connesso</div>
-        <div style="color:var(--muted);font-size:.82rem;text-align:center">Accedi per tracciare i tuoi ordini e ottenere prezzi fedeltà esclusivi</div>
-        <button class="btn-primary" style="width:100%" onclick="openLoginPanel()">Accedi →</button>
-        <a href="https://t.me/titanpharmacyceo" target="_blank" class="btn-primary" style="width:100%;display:block;text-align:center;text-decoration:none;padding:13px;border-radius:10px;font-family:'Fredoka One',cursive;font-size:.95rem;letter-spacing:.5px;box-sizing:border-box">📲 Ordina su Telegram →</a>
+      <div class="account-header-box" style="flex-direction:column;align-items:flex-start;gap:12px">
+        <div style="font-size:2.5rem">👤</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;font-size:1.1rem">Non sei connesso</div>
+          <div style="color:var(--muted);font-size:.8rem;margin-top:3px">Accedi per tracciare i tuoi ordini</div>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="openLoginPanel()">Accedi al tuo account →</button>
       </div>
-      <a class="menu-item" href="https://t.me/titanpharmacyceo" target="_blank" style="text-decoration:none;color:inherit"><div class="menu-icon">💬</div><div><h3>Contattaci su Telegram</h3><p>Rispondiamo in pochi minuti</p></div><span class="arrow">›</span></a>
-      <div class="menu-item" onclick="document.getElementById('shipping-panel').classList.add('open')"><div class="menu-icon">🚀</div><div><h3>Info Spedizione</h3><p>Tempi · Tracking · Corrieri · Costi</p></div><span class="arrow">›</span></div>
+      <div class="account-section">
+        <div class="account-section-title">Navigazione rapida</div>
+        <a class="menu-item" href="https://t.me/titanpharmacyceo" target="_blank">
+          <div class="menu-icon">💬</div>
+          <div class="menu-item-text"><h3>Contattaci su Telegram</h3><p>Rispondiamo in pochi minuti</p></div>
+          <span class="arrow">›</span>
+        </a>
+        <div class="menu-item" onclick="document.getElementById('shipping-panel').classList.add('open')">
+          <div class="menu-icon">🚀</div>
+          <div class="menu-item-text"><h3>Info Spedizione</h3><p>Tempi · Tracking · Corrieri · Costi</p></div>
+          <span class="arrow">›</span>
+        </div>
+        <a class="menu-item" href="https://t.me/titanpharmacyceo" target="_blank">
+          <div class="menu-icon">🛒</div>
+          <div class="menu-item-text"><h3>Ordina direttamente su Telegram</h3><p>Ordine rapido via chat</p></div>
+          <span class="arrow">›</span>
+        </a>
+      </div>
     `;
   }
 }
+
 function openLoginPanel(){ closePanel('login-panel'); document.getElementById('login-panel').classList.add('open'); }
 function doLogin(){
   const u=document.getElementById('login-user').value.trim();
@@ -1237,7 +1689,6 @@ function doLogin(){
   }
   closePanel('login-panel');
   renderAccount();
-  // Update FAB
   const fab=document.getElementById('admin-fab');
   if(fab) fab.classList.toggle('visible', isAdmin);
   showToast(isAdmin ? '👑 Benvenuto Admin, '+u+'!' : '✅ Benvenuto, '+u+'!');
@@ -1288,7 +1739,6 @@ function openProductForm(id){
   fc.innerHTML=`
     <div class="panel-handle"></div>
     <div class="panel-title">${p?'✏️ Edit Product':'➕ New Product'}</div>
-    
     <div class="photo-upload" id="photo-upload-area" onclick="document.getElementById('photo-file').click()">
       <input type="file" id="photo-file" accept="image/*" onchange="handlePhotoUpload(event)" style="display:none">
       <img id="photo-preview" src="${formPhoto||''}" style="${formPhoto?'display:block':'display:none'};width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:8px">
@@ -1296,9 +1746,8 @@ function openProductForm(id){
         <div style="font-size:2rem;margin-bottom:6px">📷</div>
         <div style="font-size:.82rem;color:var(--muted)">Tap to upload product photo</div>
       </div>
-      ${formPhoto?`<div style="font-size:.75rem;color:var(--green);margin-top:6px">✅ Photo uploaded — tap to change</div>`:''}
+      ${formPhoto?`<div style="font-size:.75rem;color:var(--moss);margin-top:6px">✅ Photo uploaded — tap to change</div>`:''}
     </div>
-
     <div class="form-grid">
       <div class="input-group full"><label>Product Name</label>
         <input type="text" id="f-name" value="${p?.name||''}" placeholder="e.g. AMNESIA HAZE"></div>
@@ -1335,10 +1784,9 @@ function handlePhotoUpload(e){
     const placeholder=document.getElementById('photo-placeholder');
     preview.src=formPhoto; preview.style.display='block';
     placeholder.style.display='none';
-    // Add green confirmation text
     const area=document.getElementById('photo-upload-area');
     let conf=area.querySelector('.photo-conf');
-    if(!conf){ conf=document.createElement('div'); conf.className='photo-conf'; conf.style.cssText='font-size:.75rem;color:var(--green);margin-top:6px'; area.appendChild(conf); }
+    if(!conf){ conf=document.createElement('div'); conf.className='photo-conf'; conf.style.cssText='font-size:.75rem;color:var(--moss);margin-top:6px'; area.appendChild(conf); }
     conf.textContent='✅ Photo ready — tap to change';
   };
   reader.readAsDataURL(file);
@@ -1374,9 +1822,6 @@ function showToast(msg){
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-
-// Expose to global scope (needed for onclick= in HTML with ES modules)
-
 
 // ===== PHARMA DATA =====
 const PHARMA_PRODUCTS = [
@@ -1521,9 +1966,7 @@ let pharmaFilterCat   = 'all';
 function setPharmaFilter(type, value, el){
   if(type === 'brand'){
     pharmaFilterBrand = value;
-    document.querySelectorAll('.brand-tab').forEach(t => {
-      t.className = 'brand-tab';
-    });
+    document.querySelectorAll('.brand-tab').forEach(t => { t.className = 'brand-tab'; });
     const cls = value === 'all' ? 'active-all' : ('active-' + value);
     el.classList.add(cls);
   } else {
@@ -1534,17 +1977,20 @@ function setPharmaFilter(type, value, el){
   renderPharma();
 }
 
-
-
+// ===== AMAZON-STYLE CART RENDER =====
 function renderCartPanel(){
   const list = document.getElementById('cart-items-list');
+  const summaryArea = document.getElementById('cart-summary-area');
   const btn  = document.getElementById('checkout-btn');
   const totalRow  = document.getElementById('cart-total-row');
   const noteWrap  = document.getElementById('cart-note-wrap');
+
   if(!cart.length){
+    summaryArea.innerHTML = '';
     list.innerHTML = '<div class="empty-cart"><div>🛒</div>Il carrello è vuoto</div>';
     totalRow.style.display='none'; noteWrap.style.display='none'; btn.disabled=true; return;
   }
+
   let tot = 0;
   let rows = cart.map(item => {
     let p, name, emoji, price;
@@ -1560,36 +2006,54 @@ function renderCartPanel(){
     tot += price * item.qty;
     return `<div class="cart-item">
       <div class="cart-item-thumb">${p.photo?`<img src="${p.photo}">`:(emoji||'🌿')}</div>
-      <div class="cart-item-info"><div class="cart-item-name">${name}</div><div class="cart-item-price">€${price} × ${item.qty}</div></div>
-      <div class="cart-qty">
-        <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
-        <span class="qty-num">${item.qty}</span>
-        <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+      <div class="cart-item-body">
+        <div class="cart-item-name">${name}</div>
+        <div class="cart-item-avail">✓ Disponibile · Spedizione in 24h</div>
+        <div class="cart-item-price">€${price}</div>
+        <div class="cart-item-actions">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+          <button class="cart-remove-btn" onclick="changeQty('${item.id}',${-item.qty})">Rimuovi</button>
+        </div>
       </div>
     </div>`;
   }).join('');
-  list.innerHTML = rows;
-  totalRow.style.display='flex'; noteWrap.style.display='block';
+
+  // Render Amazon-style summary box at top
+  const itemCount = cart.reduce((s,x)=>s+x.qty,0);
+  summaryArea.innerHTML = `
+    <div class="cart-summary-box">
+      <div class="cart-summary-title">Riepilogo ordine</div>
+      <div class="cart-summary-total">
+        <div>
+          <div class="cart-summary-total-label">Totale provvisorio (${itemCount} articol${itemCount!==1?'i':'o'}):</div>
+          <div class="cart-summary-sub">+ Spedizione flat <strong>€15</strong></div>
+        </div>
+        <div class="cart-summary-total-amount">€${tot+15}</div>
+      </div>
+      <button class="cart-checkout-main" onclick="placeOrder()">📲 Procedi all'ordine su Telegram →</button>
+    </div>
+  `;
+
+  list.innerHTML = `<div class="cart-items-label">Articoli nel carrello — ${itemCount} art.</div>` + rows;
+  totalRow.style.display='none'; // hide legacy row
+  noteWrap.style.display='block';
   document.getElementById('cart-total-amount').textContent = '€'+(tot+15);
   btn.disabled = false;
 }
-window.addPharmaToCart = addPharmaToCart;
-window.setPharmaFilter = setPharmaFilter;
-window.renderPharma = renderPharma;
 
 // ===== PHARMA ADMIN =====
-// Local mutable copy of pharma products (layered on top of static PHARMA_PRODUCTS)
 let PHARMA_LOCAL = JSON.parse(localStorage.getItem('tp_pharma') || 'null');
 if(!PHARMA_LOCAL) {
   PHARMA_LOCAL = JSON.parse(JSON.stringify(PHARMA_PRODUCTS));
   localStorage.setItem('tp_pharma', JSON.stringify(PHARMA_LOCAL));
 }
-// renderPharma defined in pharma admin section below
+
 function renderPharma(){
   const container = document.getElementById('pharma-content');
   if(!container) return;
 
-  // Show/hide admin button
   const adminBtn = document.getElementById('pharma-admin-btn');
   if(adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
 
@@ -1745,7 +2209,6 @@ function savePharmaProduct(){
   showToast(editingPharmaId ? '✅ Prodotto aggiornato!' : '✅ Prodotto aggiunto!');
 }
 
-// Also patch addPharmaToCart to use PHARMA_LOCAL
 function addPharmaToCart(id){
   const p = PHARMA_LOCAL.find(x => x.id === id);
   if(!p || p.oos) return;
@@ -1756,6 +2219,8 @@ function addPharmaToCart(id){
   saveCart(); updateCartUI(); showToast('✅ ' + p.name + ' aggiunto!');
 }
 window.addPharmaToCart = addPharmaToCart;
+window.setPharmaFilter = setPharmaFilter;
+window.renderPharma = renderPharma;
 
 window.openPharmaAdminPanel = openPharmaAdminPanel;
 window.renderPharmaAdminList = renderPharmaAdminList;
