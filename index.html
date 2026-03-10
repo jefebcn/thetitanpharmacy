@@ -734,6 +734,30 @@
   .pharma-add-btn:hover{transform:scale(1.15);}
   .pharma-empty{text-align:center;color:var(--muted);padding:32px;font-size:.85rem;}
 
+  /* ===================================================================
+     VARIANT SELECTOR (Tagli selezionabili)
+  =================================================================== */
+  .variant-section{display:flex;flex-direction:column;gap:8px;}
+  .variant-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+  .variant-selected-info{font-size:.78rem;color:var(--text);font-weight:600;}
+  .variant-selected-info span{color:var(--gold);}
+  .variant-grid{display:flex;flex-wrap:wrap;gap:7px;}
+  .variant-btn{
+    background:var(--bg);border:1.5px solid var(--border);border-radius:7px;
+    padding:7px 12px;font-size:.8rem;font-weight:700;cursor:pointer;
+    color:var(--muted);font-family:inherit;transition:.2s;
+    min-width:52px;text-align:center;
+  }
+  .variant-btn:hover{border-color:var(--gold);color:var(--text);}
+  .variant-btn.selected{
+    background:rgba(232,184,75,.12);border-color:var(--gold);
+    color:var(--gold);box-shadow:var(--glow-gold-sm);
+  }
+  .variant-btn.oos-v{
+    opacity:.4;cursor:not-allowed;text-decoration:line-through;
+  }
+  /* Card grid "Da" price */
+  .price-from-label{font-size:.6rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-right:2px;}
   /* Pulsing dot */
   @keyframes pulse{0%,100%{opacity:1;box-shadow:var(--glow-gold-sm)}50%{opacity:.35;box-shadow:none}}
 </style>
@@ -1033,98 +1057,123 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-// ===== DEFAULT PRODUCTS =====
+// ===== DEFAULT PRODUCTS (with variants) =====
 const DEFAULT_PRODUCTS = [
-  // ── EXISTING ──────────────────────────────────────────────────────────
+  // ── PRICED PRODUCTS with variants ─────────────────────────────────────
   {id:1,name:'DRYWORK',emoji:'🌿',badge:'premium',category:'premium',origin:'Italy',
    desc:'Classic Italian, the jewel of our catalog. Superior quality, intense and persistent aroma. Relaxing sweet effect.',
-   tags:['Indoor','Sativa','THC 22%','Floral'],price:90,unit:'10g',priceG:9,photo:''},
+   tags:['Indoor','Sativa','THC 22%','Floral'],photo:'',
+   variants:[{label:'5g',price:45,priceG:9},{label:'10g',price:85,priceG:8.5},{label:'25g',price:200,priceG:8},{label:'50g',price:375,priceG:7.5}]},
   {id:2,name:'CALISPAIN',emoji:'💎',badge:'premium',category:'premium',origin:'Spain',
    desc:'Premium from Spain. Unmistakable aroma, compact structure and abundant resin. For true connoisseurs.',
-   tags:['Indoor','Hybrid','THC 25%','Top Shelf'],price:480,unit:'50g',priceG:9.6,photo:''},
+   tags:['Indoor','Hybrid','THC 25%','Top Shelf'],photo:'',
+   variants:[{label:'10g',price:96,priceG:9.6},{label:'25g',price:225,priceG:9},{label:'50g',price:420,priceG:8.4}]},
   {id:3,name:'FROZENBUD',emoji:'❄️',badge:'frozen',category:'frozen',origin:'Netherlands',
    desc:'Frozen variety with terpenes preserved at low temperature. Fresh and crystalline flavor. Unique experience.',
-   tags:['Frozen','Indica','THC 20%','Ice Cured'],price:120,unit:'10g',priceG:12,photo:''},
+   tags:['Frozen','Indica','THC 20%','Ice Cured'],photo:'',
+   variants:[{label:'3.5g',price:45,priceG:12.9},{label:'7g',price:84,priceG:12},{label:'10g',price:115,priceG:11.5},{label:'25g',price:270,priceG:10.8}]},
   {id:4,name:'MOONROCK',emoji:'🪨',badge:'hash',category:'hash',origin:'Morocco',
    desc:'Premium hash from Morocco. Traditional artisan processing, spiced and earthy aromas. Timeless classic.',
-   tags:['Hash','Pollen','THC 18%','Artisan'],price:60,unit:'10g',priceG:6,photo:''},
+   tags:['Hash','Pollen','THC 18%','Artisan'],photo:'',
+   variants:[{label:'10g',price:55,priceG:5.5},{label:'25g',price:125,priceG:5},{label:'50g',price:230,priceG:4.6},{label:'100g',price:420,priceG:4.2}]},
   {id:5,name:'CBD RELAX',emoji:'🌼',badge:'cbd',category:'cbd',origin:'Italy',
    desc:'High concentration CBD. Zero THC, natural calming effect. Ideal for anxiety and stress. Certified and tested.',
-   tags:['CBD 15%','THC <0.2%','Organic','Certified'],price:45,unit:'10g',priceG:4.5,photo:''},
+   tags:['CBD 15%','THC <0.2%','Organic','Certified'],photo:'',
+   variants:[{label:'10g',price:45,priceG:4.5},{label:'25g',price:100,priceG:4},{label:'50g',price:185,priceG:3.7}]},
   {id:6,name:'AMNESIA',emoji:'🔥',badge:'new',category:'premium',origin:'Amsterdam',
    desc:'The iconic Amnesia Haze from Amsterdam. Citrus and spicy aroma, cerebral and creative effect. Legendary.',
-   tags:['Indoor','Sativa','THC 21%','Citrus'],price:100,unit:'10g',priceG:10,photo:''},
+   tags:['Indoor','Sativa','THC 21%','Citrus'],photo:'',
+   variants:[{label:'5g',price:55,priceG:11},{label:'10g',price:100,priceG:10},{label:'25g',price:230,priceG:9.2}]},
 
-  // ── 🇲🇦 TOP DRY SIFT FILTERED — Format 100g ───────────────────────────
+  // ── 🇲🇦 TOP DRY SIFT FILTERED — contattare per prezzo ──────────────────
   {id:10,name:'GELATO — Dry Sift',emoji:'🍨',badge:'drysift',category:'drysift',origin:'Morocco',
-   desc:'Top Dry Sift Filtered. Gelato strain — sweet and creamy profile, dense resin extraction. Format 100g.',
-   tags:['Dry Sift','Morocco','100g','Filtered'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Top Dry Sift Filtered. Gelato strain — sweet and creamy profile, dense resin extraction. Format 50g / 100g.',
+   tags:['Dry Sift','Morocco','100g','Filtered'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
   {id:11,name:'MOROCCO KO — Dry Sift',emoji:'🌙',badge:'drysift',category:'drysift',origin:'Morocco',
-   desc:'Top Dry Sift Filtered. Morocco KO — powerful Moroccan expression, earthy and spiced notes. Format 100g.',
-   tags:['Dry Sift','Morocco','100g','Filtered'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Top Dry Sift Filtered. Morocco KO — powerful Moroccan expression, earthy and spiced notes. Format 50g / 100g.',
+   tags:['Dry Sift','Morocco','100g','Filtered'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
   {id:12,name:'GUAVA CREAM — Dry Sift',emoji:'🥑',badge:'drysift',category:'drysift',origin:'Morocco',
-   desc:'Top Dry Sift Filtered. Guava Cream — tropical and creamy terpene profile, smooth extraction. Format 100g.',
-   tags:['Dry Sift','Morocco','100g','Filtered'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Top Dry Sift Filtered. Guava Cream — tropical and creamy terpene profile, smooth extraction. Format 50g / 100g.',
+   tags:['Dry Sift','Morocco','100g','Filtered'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
 
-  // ── 🔝 PLASMA STATIC — Format 100/50g ────────────────────────────────
+  // ── 🔝 PLASMA STATIC ─────────────────────────────────────────────────
   {id:20,name:'WHITE RUNTZ — Plasma',emoji:'🥥',badge:'plasma',category:'plasma',origin:'Italy',
-   desc:'Plasma Static. White Runtz — candy-like sweetness, ultra-dense trichome coating. Format 100/50g.',
-   tags:['Plasma Static','100g','50g','Top Shelf'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Plasma Static. White Runtz — candy-like sweetness, ultra-dense trichome coating. Format 50g / 100g.',
+   tags:['Plasma Static','100g','50g','Top Shelf'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
   {id:21,name:'PINEAPPLE JUICE — Plasma',emoji:'🍹',badge:'plasma',category:'plasma',origin:'Italy',
-   desc:'Plasma Static. Pineapple Juice — bright tropical notes, electric terpene expression. Format 100/50g.',
-   tags:['Plasma Static','100g','50g','Tropical'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Plasma Static. Pineapple Juice — bright tropical notes, electric terpene expression. Format 50g / 100g.',
+   tags:['Plasma Static','100g','50g','Tropical'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
   {id:22,name:'RS11 — Plasma',emoji:'🏎️',badge:'plasma',category:'plasma',origin:'Italy',
-   desc:'Plasma Static. RS11 — legendary genetics, complex layered aroma, premium resin. Format 100/50g.',
-   tags:['Plasma Static','100g','50g','Legendary'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Plasma Static. RS11 — legendary genetics, complex layered aroma, premium resin. Format 50g / 100g.',
+   tags:['Plasma Static','100g','50g','Legendary'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
   {id:23,name:'PAPAYA — Plasma',emoji:'🍑',badge:'plasma',category:'plasma',origin:'Italy',
-   desc:'Plasma Static. Papaya — exotic fruity terpenes, rich resin content. Format 100/50g.',
-   tags:['Plasma Static','100g','50g','Fruity'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Plasma Static. Papaya — exotic fruity terpenes, rich resin content. Format 50g / 100g.',
+   tags:['Plasma Static','100g','50g','Fruity'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
   {id:24,name:'GRAPE GLUE — Plasma',emoji:'🍒',badge:'plasma',category:'plasma',origin:'Italy',
-   desc:'Plasma Static. Grape Glue — deep grape and diesel fusion, sticky and potent. Format 100/50g.',
-   tags:['Plasma Static','100g','50g','Grape'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Plasma Static. Grape Glue — deep grape and diesel fusion, sticky and potent. Format 50g / 100g.',
+   tags:['Plasma Static','100g','50g','Grape'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
 
-  // ── 🎖️ PREMIUM FROZEN — Format 100g ──────────────────────────────────
+  // ── 🎖️ PREMIUM FROZEN ────────────────────────────────────────────────
   {id:30,name:'RAINBOW BELTS — Frozen',emoji:'🦄',badge:'frozen',category:'frozen',origin:'Italy',
-   desc:'Premium Frozen. Rainbow Belts — vibrant multi-terpene profile, ice-cured for maximum freshness. Format 100g.',
-   tags:['Frozen','Premium','100g','Rainbow'],price:0,unit:'100g',priceG:0,photo:''},
+   desc:'Premium Frozen. Rainbow Belts — vibrant multi-terpene profile, ice-cured for maximum freshness. Format 50g / 100g.',
+   tags:['Frozen','Premium','100g','Rainbow'],photo:'',
+   variants:[{label:'50g',price:0},{label:'100g',price:0}]},
 
-  // ── 🎖️ PREMIUM CALI USA ───────────────────────────────────────────────
+  // ── 🇺🇸 CALI USA ─────────────────────────────────────────────────────
   {id:40,name:'11:11',emoji:'🔥',badge:'premium',category:'cali',origin:'USA',
-   desc:'Premium Cali USA. 11:11 — rare American genetics, powerful and complex. Import directo USA.',
-   tags:['Cali USA','Premium','Import','Exotic'],price:0,unit:'TBD',priceG:0,photo:''},
+   desc:'Premium Cali USA. 11:11 — rare American genetics, powerful and complex. Import diretto USA.',
+   tags:['Cali USA','Premium','Import','Exotic'],photo:'',
+   variants:[{label:'3.5g',price:0},{label:'7g',price:0},{label:'14g',price:0}]},
   {id:41,name:'WHITE RAINBOW',emoji:'🔥',badge:'premium',category:'cali',origin:'USA',
    desc:'Premium Cali USA. White Rainbow — vivid terpene spectrum, top-shelf American strain.',
-   tags:['Cali USA','Premium','Import','Exotic'],price:0,unit:'TBD',priceG:0,photo:''},
+   tags:['Cali USA','Premium','Import','Exotic'],photo:'',
+   variants:[{label:'3.5g',price:0},{label:'7g',price:0},{label:'14g',price:0}]},
   {id:42,name:'SUBZERO CHERRY BOMB',emoji:'🔥',badge:'frozen',category:'cali',origin:'USA',
    desc:'Premium Cali USA. Subzero Cherry Bomb — icy and explosive cherry profile, USA exclusive.',
-   tags:['Cali USA','Frozen','Import','Cherry'],price:0,unit:'TBD',priceG:0,photo:''},
+   tags:['Cali USA','Frozen','Import','Cherry'],photo:'',
+   variants:[{label:'3.5g',price:0},{label:'7g',price:0},{label:'14g',price:0}]},
   {id:43,name:'NINE LIONS',emoji:'🔥',badge:'premium',category:'cali',origin:'USA',
    desc:'Premium Cali USA. Nine Lions — powerful USA strain, bold and long-lasting.',
-   tags:['Cali USA','Premium','Import','Exotic'],price:0,unit:'TBD',priceG:0,photo:''},
+   tags:['Cali USA','Premium','Import','Exotic'],photo:'',
+   variants:[{label:'3.5g',price:0},{label:'7g',price:0},{label:'14g',price:0}]},
 
-  // ── 🇺🇸 PREMIUM CALI BAGS USA ────────────────────────────────────────
+  // ── 🇺🇸 CALI BAGS USA ────────────────────────────────────────────────
   {id:50,name:'CALI BAGS USA',emoji:'💼',badge:'premium',category:'cali',origin:'USA',
-   desc:'Premium Cali Bags USA. Bags 3.5g + 0.7g Pre-Roll. 5+ strain selection — authentic US packaging.',
-   tags:['Cali USA','3.5g','Pre-Roll','Bags'],price:0,unit:'3.5g + pre-roll',priceG:0,photo:''},
+   desc:'Premium Cali Bags USA. Buste 3.5g + Pre-Roll 0.7g. Selezione di 5+ strain — packaging autentico USA.',
+   tags:['Cali USA','3.5g','Pre-Roll','Bags'],photo:'',
+   variants:[{label:'3.5g+Pre-Roll',price:0},{label:'2x Bags',price:0},{label:'4x Bags',price:0}]},
 
   // ── 🇪🇸 CALI SPAIN TOP SHELF ─────────────────────────────────────────
   {id:60,name:'PEACH POP',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
-   desc:'Cali Spain Top Shelf. Peach Pop — sun-grown Spanish excellence, peachy and sweet terpene burst.',
-   tags:['Cali Spain','Top Shelf','Peach','Indoor'],price:0,unit:'TBD',priceG:0,photo:''},
+   desc:'Cali Spain Top Shelf. Peach Pop — eccellenza spagnola, profilo terpenico dolce e peschioso.',
+   tags:['Cali Spain','Top Shelf','Peach','Indoor'],photo:'',
+   variants:[{label:'5g',price:0},{label:'10g',price:0},{label:'20g',price:0}]},
   {id:61,name:'GRAPE BOMB',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
-   desc:'Cali Spain Top Shelf. Grape Bomb — explosive grape aroma, dense and resinous Spanish genetics.',
-   tags:['Cali Spain','Top Shelf','Grape','Indoor'],price:0,unit:'TBD',priceG:0,photo:''},
+   desc:'Cali Spain Top Shelf. Grape Bomb — aroma esplosivo d\'uva, genetica spagnola densa e resinosa.',
+   tags:['Cali Spain','Top Shelf','Grape','Indoor'],photo:'',
+   variants:[{label:'5g',price:0},{label:'10g',price:0},{label:'20g',price:0}]},
   {id:62,name:'LEMON ZK',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
-   desc:'Cali Spain Top Shelf. Lemon ZK — citrus-forward Zkittlez cross, bright and zesty.',
-   tags:['Cali Spain','Top Shelf','Lemon','Zkittlez'],price:0,unit:'TBD',priceG:0,photo:''},
+   desc:'Cali Spain Top Shelf. Lemon ZK — incrocio Zkittlez agrumato, brillante e fresco.',
+   tags:['Cali Spain','Top Shelf','Lemon','Zkittlez'],photo:'',
+   variants:[{label:'5g',price:0},{label:'10g',price:0},{label:'20g',price:0}]},
   {id:63,name:'RS INFERNO',emoji:'🇪🇸',badge:'premium',category:'spain',origin:'Spain',
-   desc:'Cali Spain Top Shelf. RS Inferno — fiery RS genetics from Spain, intense and long-lasting.',
-   tags:['Cali Spain','Top Shelf','RS','Inferno'],price:0,unit:'TBD',priceG:0,photo:''},
+   desc:'Cali Spain Top Shelf. RS Inferno — genetica RS di fuoco dalla Spagna, intensa e duratura.',
+   tags:['Cali Spain','Top Shelf','RS','Inferno'],photo:'',
+   variants:[{label:'5g',price:0},{label:'10g',price:0},{label:'20g',price:0}]},
 
-  // ── 💨 PREMIUM VAPE USA ───────────────────────────────────────────────
+  // ── 💨 VAPE USA ───────────────────────────────────────────────────────
   {id:70,name:'LIVE RESIN VAPE BOX USA',emoji:'💨',badge:'new',category:'vape',origin:'USA',
-   desc:'Premium Vape USA. Box: 1 Live Resin Vape 2pz (1g/1g) + Pre-Roll 0.7g. 6+ strain selection.',
-   tags:['Vape','Live Resin','USA','Pre-Roll'],price:0,unit:'2x 1g + pre-roll',priceG:0,photo:''},
+   desc:'Premium Vape USA. Box: 1 Live Resin Vape 2pz (1g/1g) + Pre-Roll 0.7g. Selezione 6+ strain.',
+   tags:['Vape','Live Resin','USA','Pre-Roll'],photo:'',
+   variants:[{label:'1x Vape 1g',price:0},{label:'Box 2x 1g',price:0},{label:'Box + Pre-Roll',price:0}]},
 ];
 
 // ===== STATE =====
@@ -1306,9 +1355,18 @@ function renderProducts(){
     return;
   }
   grid.innerHTML = filtered.map((p,idx)=>{
-    const hasPrice = p.price && p.price > 0;
-    const priceInt = hasPrice ? Math.floor(p.price) : null;
-    const priceDec = hasPrice ? String(p.price.toFixed(2)).split('.')[1] : null;
+    // Resolve price: variants or fixed price
+    const hasVariants = p.variants && p.variants.length > 0;
+    const pricedVariants = hasVariants ? p.variants.filter(v => v.price > 0) : [];
+    const minPrice = pricedVariants.length > 0 ? Math.min(...pricedVariants.map(v=>v.price)) : 0;
+    const hasPrice = minPrice > 0;
+    // Legacy fixed-price support
+    const fixedPrice = !hasVariants && p.price > 0 ? p.price : 0;
+    const showPrice = hasPrice || fixedPrice > 0;
+    const displayPrice = hasPrice ? minPrice : fixedPrice;
+    const priceInt = showPrice ? Math.floor(displayPrice) : null;
+    const priceDec = showPrice ? String(displayPrice.toFixed(2)).split('.')[1] : null;
+
     const stars = parseFloat(fakeStars(p.id));
     const reviews = fakeReviewCount(p.id);
     return `
@@ -1326,32 +1384,26 @@ function renderProducts(){
         </div>
         <div class="prime-badge">✈ Titan Prime ✓</div>
         <div class="product-price-block">
-          ${hasPrice ? `
+          ${showPrice ? `
           <div class="price-top">
+            <span class="price-from-label">${hasVariants ? 'Da ' : ''}</span>
             <span class="price-currency">€</span>
             <span class="price-int">${priceInt}</span>
             <span class="price-dec">${priceDec}</span>
           </div>
-          <div class="price-unit">da ${p.unit} · €${p.priceG}/g</div>
+          ${hasVariants ? `<div class="price-unit">${pricedVariants.length} formati disponibili</div>` : ''}
           ` : `<div class="price-contact">💬 Contattaci per il prezzo</div>`}
         </div>
-        <button class="add-btn" onclick="event.stopPropagation();addToCartByIndex(${idx},1)">
-          🛒 Aggiungi
+        <button class="add-btn" onclick="event.stopPropagation();openDetail(${idx})">
+          ${hasVariants ? '⚖️ Scegli Formato' : '🛒 Aggiungi'}
         </button>
       </div>
     </div>
   `}).join('');
 }
 
-// ===== DETAIL (Buy Box style) =====
-function getFilteredProducts(){
-  const search = document.getElementById('search-input').value.toLowerCase();
-  return PRODUCTS.filter(p=>{
-    const matchCat = currentFilter==='all' || p.category===currentFilter || p.badge===currentFilter;
-    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search) || p.origin.toLowerCase().includes(search);
-    return matchCat && matchSearch;
-  });
-}
+// ===== DETAIL STATE =====
+let detailSelectedVariant = null; // { label, price, priceG }
 
 function openDetail(idx){
   const filtered = getFilteredProducts();
@@ -1359,14 +1411,21 @@ function openDetail(idx){
   if(!p) return;
   detailQty = 1;
   const pid = p.id;
-  const hasPrice = p.price && p.price > 0;
-  const priceInt = hasPrice ? Math.floor(p.price) : null;
-  const priceDec = hasPrice ? String(p.price.toFixed(2)).split('.')[1] : null;
+
+  // Resolve variants vs fixed price
+  const hasVariants = p.variants && p.variants.length > 0;
+  const pricedVariants = hasVariants ? p.variants.filter(v=>v.price>0) : [];
+
+  // Default selected variant: first priced one, or first one, or null
+  if(hasVariants){
+    detailSelectedVariant = pricedVariants.length > 0 ? pricedVariants[0] : p.variants[0];
+  } else {
+    detailSelectedVariant = p.price > 0 ? {label: p.unit||'', price: p.price, priceG: p.priceG||0} : null;
+  }
+
   const stars = parseFloat(fakeStars(p.id));
   const reviews = fakeReviewCount(p.id);
-
-  // Build bullet points from description sentences
-  const bullets = p.desc.split('. ').filter(Boolean).map(s => s.trim()).filter(s => s.length > 5);
+  const bullets = p.desc.split('. ').filter(Boolean).map(s=>s.trim()).filter(s=>s.length>5);
 
   document.getElementById('detail-content').innerHTML = `
     <div class="panel-handle"></div>
@@ -1395,51 +1454,139 @@ function openDetail(idx){
     <!-- Tags -->
     <div class="detail-tags">${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
 
-    <!-- Description as Amazon bullet points -->
+    <!-- Description as bullet points -->
     <div class="detail-bullets">
       ${bullets.map(b=>`<div class="detail-bullet">${b}</div>`).join('')}
     </div>
 
     <!-- BUY BOX -->
-    <div class="buy-box">
-      ${hasPrice ? `
-        <div>
-          <div class="buy-box-price-label">Prezzo</div>
-          <div class="buy-box-price-row">
-            <span class="buy-box-curr">€</span>
-            <span class="buy-box-int">${priceInt}</span>
-            <span class="buy-box-dec">${priceDec}</span>
-          </div>
-          <div class="buy-box-unit">da ${p.unit||'10g'} · €${p.priceG||0}/g</div>
-        </div>
-        <div class="buy-box-divider"></div>
-        <div class="buy-box-avail">Disponibilità immediata</div>
-        <div class="buy-box-divider"></div>
-        <div>
-          <div class="buy-box-qty-label">Quantità</div>
-          <div class="qty-selector" style="margin-top:6px">
-            <button onclick="changeDetailQty(-1)">−</button>
-            <span id="detail-qty">1</span>
-            <button onclick="changeDetailQty(1)">+</button>
-          </div>
-        </div>
-        <button class="buy-box-add-btn" onclick="addToCartById('${pid}',parseInt(document.getElementById('detail-qty').textContent));closePanel('detail-panel');showToast('✅ Aggiunto al carrello!')">
-          🛒 Aggiungi al Carrello
-        </button>
-        <a href="https://t.me/titanpharmacyceo" target="_blank" class="buy-box-order-btn">
-          📲 Procedi con Telegram →
-        </a>
-      ` : `
-        <div class="buy-box-contact">💬 Contattaci per il prezzo e la disponibilità</div>
-        <a href="https://t.me/titanpharmacyceo" target="_blank" class="buy-box-order-btn">
-          📲 Contattaci su Telegram →
-        </a>
-      `}
+    <div class="buy-box" id="buy-box">
+      ${buildBuyBox(p, hasVariants)}
     </div>
   `;
   document.getElementById('detail-panel').classList.add('open');
 }
+
+function buildBuyBox(p, hasVariants){
+  const v = detailSelectedVariant;
+  const hasPrice = v && v.price > 0;
+  const priceInt = hasPrice ? Math.floor(v.price) : null;
+  const priceDec = hasPrice ? String(v.price.toFixed(2)).split('.')[1] : null;
+
+  // Variant selector HTML
+  let variantHTML = '';
+  if(hasVariants && p.variants && p.variants.length > 0){
+    const btns = p.variants.map(vt => {
+      const isSelected = v && v.label === vt.label;
+      return `<button class="variant-btn${isSelected?' selected':''}" onclick="selectVariant('${p.id}',${JSON.stringify(vt).replace(/"/g,'&quot;')})">${vt.label}${vt.price>0?'<br><span style=\'font-size:.65rem;opacity:.8\'>€'+vt.price+'</span>':''}</button>`;
+    }).join('');
+
+    const pricePerG = v && v.priceG > 0 ? `· €${v.priceG.toFixed(2)}/g` : '';
+    const selectedLabel = v ? `<span>${v.label}</span>${pricePerG ? ' <span style="color:var(--muted);font-size:.72rem">'+pricePerG+'</span>' : ''}` : '<span style="color:var(--muted)">Nessuno selezionato</span>';
+
+    variantHTML = `
+      <div class="variant-section">
+        <div class="variant-label">Formato / Quantità</div>
+        <div class="variant-selected-info">Selezionato: ${selectedLabel}</div>
+        <div class="variant-grid">${btns}</div>
+      </div>
+      <div class="buy-box-divider"></div>`;
+  }
+
+  const pid = p.id;
+  const variantLabel = v ? v.label : '';
+
+  return `
+    ${hasPrice ? `
+      <div>
+        <div class="buy-box-price-label">Prezzo${v && v.label ? ' — '+v.label : ''}</div>
+        <div class="buy-box-price-row">
+          <span class="buy-box-curr">€</span>
+          <span class="buy-box-int" id="bb-price-int">${priceInt}</span>
+          <span class="buy-box-dec" id="bb-price-dec">${priceDec}</span>
+        </div>
+        ${v && v.priceG > 0 ? `<div class="buy-box-unit" id="bb-price-g">€${v.priceG.toFixed(2)} al grammo</div>` : '<div class="buy-box-unit" id="bb-price-g"></div>'}
+      </div>
+      <div class="buy-box-divider"></div>
+    ` : `
+      <div id="bb-price-int" style="display:none"></div>
+      <div id="bb-price-dec" style="display:none"></div>
+      <div id="bb-price-g" style="display:none"></div>
+    `}
+
+    ${variantHTML}
+
+    ${hasPrice || !hasVariants ? `
+      <div class="buy-box-avail">Disponibilità immediata</div>
+      <div class="buy-box-divider"></div>
+    ` : `<div class="buy-box-contact">💬 Contattaci per disponibilità e prezzo</div>`}
+
+    ${hasPrice ? `
+      <div>
+        <div class="buy-box-qty-label">Quantità</div>
+        <div class="qty-selector" style="margin-top:6px">
+          <button onclick="changeDetailQty(-1)">−</button>
+          <span id="detail-qty">1</span>
+          <button onclick="changeDetailQty(1)">+</button>
+        </div>
+      </div>
+      <button class="buy-box-add-btn" id="bb-add-btn" onclick="addDetailToCart('${pid}')">
+        🛒 Aggiungi al Carrello
+      </button>
+      <a href="https://t.me/titanpharmacyceo" target="_blank" class="buy-box-order-btn">
+        📲 Procedi con Telegram →
+      </a>
+    ` : `
+      <a href="https://t.me/titanpharmacyceo" target="_blank" class="buy-box-order-btn">
+        📲 Contattaci su Telegram →
+      </a>
+    `}
+  `;
+}
+
+// Called when user clicks a variant button
+function selectVariant(productId, variantObj){
+  detailSelectedVariant = variantObj;
+  // Find the product to rebuild buy box
+  const p = PRODUCTS.find(x => String(x.id) === String(productId));
+  if(!p) return;
+  const hasVariants = p.variants && p.variants.length > 0;
+  const bb = document.getElementById('buy-box');
+  if(bb) bb.innerHTML = buildBuyBox(p, hasVariants);
+}
+window.selectVariant = selectVariant;
+
+// Add to cart from detail panel (variant-aware)
+function addDetailToCart(pid){
+  const p = PRODUCTS.find(x => String(x.id) === String(pid));
+  if(!p) return;
+  const qty = parseInt(document.getElementById('detail-qty')?.textContent || '1');
+  const v = detailSelectedVariant;
+  if(!v || v.price <= 0){
+    showToast('⚠️ Seleziona un formato disponibile');
+    return;
+  }
+  // Cart ID = productId + "_" + variantLabel
+  const cartId = String(pid) + '_' + v.label;
+  const e = cart.find(x => x.id === cartId);
+  if(e) e.qty += qty;
+  else cart.push({ id: cartId, qty, productRef: String(pid), variantLabel: v.label, variantPrice: v.price });
+  saveCart(); updateCartUI();
+  closePanel('detail-panel');
+  showToast('✅ Aggiunto: ' + p.name + ' ' + v.label);
+}
+window.addDetailToCart = addDetailToCart;
+
+// ===== DETAIL HELPERS =====
 function changeDetailQty(d){ detailQty=Math.max(1,detailQty+d); document.getElementById('detail-qty').textContent=detailQty; }
+function getFilteredProducts(){
+  const search = document.getElementById('search-input').value.toLowerCase();
+  return PRODUCTS.filter(p=>{
+    const matchCat = currentFilter==='all' || p.category===currentFilter || p.badge===currentFilter;
+    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search) || p.origin.toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+}
 
 // ===== CART =====
 function addToCartByIndex(idx, qty=1){
@@ -1476,28 +1623,21 @@ function placeOrder(){
   const note=document.getElementById('order-note').value;
 
   const itemLines = cart.map(x=>{
-    if(String(x.id).startsWith('pharma_')){
-      const pp=PHARMA_LOCAL.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
-      return pp ? `${pp.emoji} ${pp.name} ×${x.qty} — €${pp.price * x.qty}` : null;
-    }
-    const p=PRODUCTS.find(px=>String(px.id)===String(x.id));
-    return p ? `${p.emoji||'🌿'} ${p.name} ×${x.qty} — €${p.price * x.qty}` : null;
+    const r = resolveCartItem(x);
+    if(!r) return null;
+    const formatLabel = r.variantLabel ? ` [${r.variantLabel}]` : '';
+    const priceLabel = r.price > 0 ? ` — €${(r.price * x.qty).toFixed(2)}` : ' — (preventivo)';
+    return `${r.emoji} ${r.name}${formatLabel} ×${x.qty}${priceLabel}`;
   }).filter(Boolean);
 
-  const tot=cart.reduce((s,x)=>{
-    if(String(x.id).startsWith('pharma_')){
-      const pp=PHARMA_LOCAL.find(px=>('pharma_'+px.id)===String(x.id)||px.id===x.pharmaRef);
-      return s+(pp?pp.price*x.qty:0);
-    }
-    const p=PRODUCTS.find(px=>String(px.id)===String(x.id));return s+(p?p.price*x.qty:0);
-  },0);
+  const tot=cart.reduce((s,x)=>{ const r=resolveCartItem(x); return s+(r?r.price*x.qty:0); },0);
 
   const orderId='TP-'+Date.now().toString(36).toUpperCase();
   const date=new Date().toLocaleDateString('en-GB');
 
   const o={
     id:orderId, date, status:'pending', note,
-    items:itemLines.map(l=>l.replace(/ — €[\d.]+/,'')).join(', '),
+    items:itemLines.map(l=>l.replace(/ — €[\d.]+| — \(preventivo\)/,'')).join(', '),
     total:tot
   };
   orders.unshift(o);
@@ -1514,7 +1654,7 @@ function placeOrder(){
     ...itemLines,
     '',
     `🚚 Spedizione: €15`,
-    `💰 *TOTALE: €${tot + 15}*`,
+    `💰 *TOTALE: €${(tot + 15).toFixed(2)}*${tot===0?' (su preventivo)':''}`,
   ];
   if(note) msgLines.push('', `📝 Note: ${note}`);
 
@@ -1978,6 +2118,26 @@ function setPharmaFilter(type, value, el){
 }
 
 // ===== AMAZON-STYLE CART RENDER =====
+function resolveCartItem(item){
+  // Pharma item
+  if(String(item.id).startsWith('pharma_')){
+    const p = PHARMA_PRODUCTS.find(x => x.id === item.pharmaRef || ('pharma_'+x.id) === item.id);
+    if(!p) return null;
+    return { name: p.name, emoji: p.emoji, price: p.price, photo: '', variantLabel: '', isPharma: true, rawId: item.id };
+  }
+  // Variant item: id = "productId_variantLabel"
+  if(item.productRef || item.variantLabel){
+    const p = PRODUCTS.find(x => String(x.id) === String(item.productRef || item.id.split('_')[0]));
+    if(!p) return null;
+    return { name: p.name, emoji: p.emoji||'🌿', price: item.variantPrice||0, photo: p.photo||'', variantLabel: item.variantLabel||'', isPharma: false, rawId: item.id };
+  }
+  // Legacy fixed-price item
+  const p = PRODUCTS.find(x => String(x.id) === String(item.id));
+  if(!p) return null;
+  const price = p.price || (p.variants && p.variants[0] ? p.variants[0].price : 0);
+  return { name: p.name, emoji: p.emoji||'🌿', price, photo: p.photo||'', variantLabel: '', isPharma: false, rawId: item.id };
+}
+
 function renderCartPanel(){
   const list = document.getElementById('cart-items-list');
   const summaryArea = document.getElementById('cart-summary-area');
@@ -1993,23 +2153,17 @@ function renderCartPanel(){
 
   let tot = 0;
   let rows = cart.map(item => {
-    let p, name, emoji, price;
-    if(String(item.id).startsWith('pharma_')){
-      p = PHARMA_PRODUCTS.find(x => x.id === item.pharmaRef || ('pharma_'+x.id) === item.id);
-      if(!p) return '';
-      name = p.name; emoji = p.emoji; price = p.price;
-    } else {
-      p = PRODUCTS.find(x => String(x.id) === String(item.id));
-      if(!p) return '';
-      name = p.name; emoji = p.emoji || '🌿'; price = p.price;
-    }
-    tot += price * item.qty;
+    const r = resolveCartItem(item);
+    if(!r) return '';
+    tot += r.price * item.qty;
+    const displayName = r.variantLabel ? `${r.name} <span style="color:var(--muted);font-size:.75rem;font-weight:400">· ${r.variantLabel}</span>` : r.name;
+    const availText = r.price > 0 ? '✓ Disponibile · Spedizione in 24h' : '💬 Contattaci per il prezzo';
     return `<div class="cart-item">
-      <div class="cart-item-thumb">${p.photo?`<img src="${p.photo}">`:(emoji||'🌿')}</div>
+      <div class="cart-item-thumb">${r.photo?`<img src="${r.photo}">`:(r.emoji||'🌿')}</div>
       <div class="cart-item-body">
-        <div class="cart-item-name">${name}</div>
-        <div class="cart-item-avail">✓ Disponibile · Spedizione in 24h</div>
-        <div class="cart-item-price">€${price}</div>
+        <div class="cart-item-name">${displayName}</div>
+        <div class="cart-item-avail">${availText}</div>
+        ${r.price > 0 ? `<div class="cart-item-price">€${r.price} × ${item.qty} = <strong style="color:var(--gold-light)">€${(r.price*item.qty).toFixed(2)}</strong></div>` : ''}
         <div class="cart-item-actions">
           <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
           <span class="qty-num">${item.qty}</span>
@@ -2020,26 +2174,27 @@ function renderCartPanel(){
     </div>`;
   }).join('');
 
-  // Render Amazon-style summary box at top
+  // Summary box
   const itemCount = cart.reduce((s,x)=>s+x.qty,0);
+  const hasContactItems = cart.some(item => { const r=resolveCartItem(item); return r && r.price===0; });
   summaryArea.innerHTML = `
     <div class="cart-summary-box">
       <div class="cart-summary-title">Riepilogo ordine</div>
       <div class="cart-summary-total">
         <div>
           <div class="cart-summary-total-label">Totale provvisorio (${itemCount} articol${itemCount!==1?'i':'o'}):</div>
-          <div class="cart-summary-sub">+ Spedizione flat <strong>€15</strong></div>
+          <div class="cart-summary-sub">+ Spedizione flat <strong>€15</strong>${hasContactItems?' · Alcuni prezzi da confermare':''}</div>
         </div>
-        <div class="cart-summary-total-amount">€${tot+15}</div>
+        <div class="cart-summary-total-amount">${tot>0?'€'+(tot+15):'Su preventivo'}</div>
       </div>
       <button class="cart-checkout-main" onclick="placeOrder()">📲 Procedi all'ordine su Telegram →</button>
     </div>
   `;
 
   list.innerHTML = `<div class="cart-items-label">Articoli nel carrello — ${itemCount} art.</div>` + rows;
-  totalRow.style.display='none'; // hide legacy row
+  totalRow.style.display='none';
   noteWrap.style.display='block';
-  document.getElementById('cart-total-amount').textContent = '€'+(tot+15);
+  document.getElementById('cart-total-amount').textContent = tot>0?'€'+(tot+15):'Su preventivo';
   btn.disabled = false;
 }
 
