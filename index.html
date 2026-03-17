@@ -2384,6 +2384,34 @@ window.deletePharmaProduct = deletePharmaProduct;
 window.openPharmaForm = openPharmaForm;
 window.savePharmaProduct = savePharmaProduct;
 
+/* ===== DRAG-TO-SCROLL per barre scrollabili ===== */
+(function(){
+  const selectors = ['.sub-nav', '.brand-tabs', '.cat-tabs'];
+  selectors.forEach(sel => {
+    const el = document.querySelector(sel);
+    if(!el) return;
+    let isDown = false, startX, scrollLeft;
+
+    el.addEventListener('mousedown', e => {
+      isDown = true;
+      el.style.cursor = 'grabbing';
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+      e.preventDefault();
+    });
+    el.addEventListener('mouseleave', () => { isDown = false; el.style.cursor = ''; });
+    el.addEventListener('mouseup',    () => { isDown = false; el.style.cursor = ''; });
+    el.addEventListener('mousemove',  e => {
+      if(!isDown) return;
+      const x    = e.pageX - el.offsetLeft;
+      const walk = (x - startX) * 1.4;
+      el.scrollLeft = scrollLeft - walk;
+    });
+
+    el.style.webkitOverflowScrolling = 'touch';
+  });
+})();
+
 window.showView=showView; window.openCart=openCart; window.closePanel=closePanel;
 window.setFilter=setFilter; window.filterProducts=filterProducts;
 window.openDetail=openDetail; window.changeDetailQty=changeDetailQty;
